@@ -1154,35 +1154,39 @@ def change_analysis(src_df, src_col_topic='topic', src_col_rf=None,
 
     return df
 
+def main(src_file='infile.xlsx',
+         src_sheet='Sheet1',
+         src_col_dt='date',
+         src_col_topic='strategy',
+         src_col_rfr='rfr',
+         src_col_bmk='benchmark',
+         tgt_file='outfile.xlsx'
+        ):
+    
+    # read source data
+    # src_file = ('PATH\\returns\\msci_returns.xlsx')
+    # src_file = ('PATH\\returns\\spx_returns_trd.xlsx')
+    #src_sheet = 'Sheet1'
+    #src_col_dt = 'date'
+    #src_col_topic = 'strategy'
+    #src_col_rf = 'rfr'
+    #src_col_bmk = 'benchmark'
+    xlsx = pd.ExcelFile(src_file)
+    src_df = pd.read_excel(xlsx, src_sheet)
+    src_df.index = src_df[src_col_dt]
 
-# read source data
-# src_file = ('C:\\Users\\greg\\OneDrive - 42 Voyager LLC\\analytics\\' +
-#            'invdata_analyzer\\returns\\msci_returns.xlsx')
-src_file = ('C:\\Users\\greg\\OneDrive - 42 Voyager LLC\\analytics\\' +
-            'invdata_analyzer\\returns\\spx_returns_trd.xlsx')
-src_sheet = 'Sheet1'
-src_col_dt = 'date'
-src_col_topic = 'strategy'
-src_col_rf = 'rfr'
-src_col_bmk = 'benchmark'
-xlsx = pd.ExcelFile(src_file)
-src_df = pd.read_excel(xlsx, src_sheet)
-src_df.index = src_df[src_col_dt]
+    df = change_analysis(src_df, src_col_topic, src_col_rf, src_col_bmk)
 
-df = change_analysis(src_df, src_col_topic, src_col_rf, src_col_bmk)
-
-# write data to excel file
-# tgt_file = ('C:\\Users\\greg\\OneDrive - 42 Voyager LLC\\analytics\\' +
-#            'invdata_analyzer\\returns\\msci_output.xlsx')
-tgt_file = ('C:\\Users\\greg\\OneDrive - 42 Voyager LLC\\analytics\\' +
-            'invdata_analyzer\\returns\\spx_trd_out.xlsx')
-xlsx_writer = pd.ExcelWriter(tgt_file)
-'''
-df.reorder_levels(('period', 'measure', 'srs_type'), 1).sort_index(axis=1,
-                 level=('period', 'measure', 'srs_type')).to_excel(
-                         xlsx_writer, 'Sheet1')
-'''
-df.reorder_levels(('measure', 'period', 'srs_type'), 1).sort_index(axis=1,
-                 level=('measure', 'period', 'srs_type')).to_excel(
-                         xlsx_writer, 'Sheet1')
-xlsx_writer.save()
+    # write data to excel file
+    # tgt_file = ('PATH\\returns\\msci_output.xlsx')
+    # tgt_file = ('PATH\\returns\\spx_trd_out.xlsx')
+    xlsx_writer = pd.ExcelWriter(tgt_file)
+    '''
+    df.reorder_levels(('period', 'measure', 'srs_type'), 1).sort_index(axis=1,
+                     level=('period', 'measure', 'srs_type')).to_excel(
+                             xlsx_writer, 'Sheet1')
+    '''
+    df.reorder_levels(('measure', 'period', 'srs_type'), 1).sort_index(axis=1,
+                     level=('measure', 'period', 'srs_type')).to_excel(
+                             xlsx_writer, 'Sheet1')
+    xlsx_writer.save()
