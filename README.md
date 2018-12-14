@@ -35,12 +35,12 @@ two primary uses for this python package:
 
 ## installation
 
-TODO
+[TODO]
 
 
 ## example usage
 
-TODO
+[TODO]
 
 
 ## release history
@@ -53,6 +53,12 @@ TODO
     * allow for passing in compound or log returns
     * build the drawdown algo using my brain instead of brute force
     * annualize and de-annualize functions
+
+* 0.0.3 - [yyyy-mm-dd]
+    * ADD
+        * Sphinx documentation (in 'docs' folder)
+    * CHANGE
+        * Function variable names to be more consistent / descriptive
 
 * 0.0.2 - 2018-12-12
     * ADD
@@ -75,4 +81,4 @@ distributed under the MIT license. see ''LICENSE'' for more information.
 
 ## contributing
 
-TODO
+[TODO]

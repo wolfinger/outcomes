@@ -6,7 +6,6 @@ outcomes: more effective financial analysis
    :caption: Contents:
 
    modules
-   outcomes
 
 
 

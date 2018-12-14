@@ -40,7 +40,7 @@ class TimePeriod:
     """A defined period of time to assist with common time period analysis.
 
     Attributes:
-        name (str): A short label for the time period e.g., 1w = one week.
+        name (str): A short label for the time period (e.g., 1w = one week).
         ann_factor (float): Factor used to annualize the time period.
         stat_flag (bool, optional). Boolean indicating if time period requires
             a minimum number of observations to be statistically useful.
@@ -1043,6 +1043,27 @@ def change_analysis(src_df, src_col_topic='topic', src_col_rf=None,
                     src_col_bmk=None, annualize_flag=True, tm_periods=None,
                     measures=None):
     """Generates all of the change analytics data from a Pandas DataFrame.
+
+    [longer desc]
+
+    Args:
+        src_df (Pandas DataFrame): The source data set.
+        src_col_topic (str, optional): Column name of the topic series.
+            (default is 'topic')
+        src_col_rf (str, optional): Column name of the risk-free series.
+            (default is None)
+        src_col_bmk (str, optional): Column name of the benchmark/reference 
+            series.
+            (default is None)
+        annualize_flag (bool, optional): Indicates whether calculations should 
+            be stated annually.
+            (default is True)
+        tm_periods (list of TimePeriod): [needs implementation].
+        measures (list of str): [needs implementation].
+    
+    Returns:
+        Pandas DataFrame: A complete change analysis using the measures and 
+        time periods specified (default all).
     """
     
     # create change series data structure
@@ -1051,7 +1072,7 @@ def change_analysis(src_df, src_col_topic='topic', src_col_rf=None,
     srs_type_bmk = 'bmk'
     srs_type_excess = 'excess'
     srs_type_active = 'active'
-    chg_streams = [
+    chg_srs = [
         srs_type_topic,
         srs_type_rf,
         srs_type_bmk,
@@ -1062,7 +1083,7 @@ def change_analysis(src_df, src_col_topic='topic', src_col_rf=None,
     level_ln = 'level_ln'
     chg_rel = 'chg_rel'  # the relative change, aka the compound return
     chg_abs = 'chg_abs'  # the absolute change in the level
-    chg_ln = 'chg_ln'  # log returns, the absolute change in the log level
+    chg_ln = 'chg_ln'  # the absolute change in the log level
     vol_lvl = 'vol_lvl'  # vol of the level of the series
     vol_lvl_ln = 'vol_lvl_ln'  # vol of the log level of the series
     vol_cmp = 'vol_cmp'  # vol of relative changes/compound returns
@@ -1187,7 +1208,6 @@ def change_analysis(src_df, src_col_topic='topic', src_col_rf=None,
 
     # create change/return time period columns
     cols = []
-
     for key in src_chg_streams:
         cols.append([key, level, tm_period_spot[0]])
         cols.append([key, level_ln, tm_period_spot[0]])
@@ -1203,7 +1223,7 @@ def change_analysis(src_df, src_col_topic='topic', src_col_rf=None,
             cols.append([key, chg_ln, key2])
 
     # create vol time period columns
-    for key in chg_streams:
+    for key in chg_srs:
         for key2 in tm_periods.keys():
             if tm_periods[key2][1] is True:
                 cols.append([key, vol_cmp, key2])
@@ -1267,7 +1287,7 @@ def change_analysis(src_df, src_col_topic='topic', src_col_rf=None,
     df.loc[:, (srs_type_active, chg_rel, tm_period_spot[0])] = np.exp(
             df[srs_type_active][chg_ln][tm_period_spot[0]]) - 1
 
-    for ret in chg_streams:
+    for ret in chg_srs:
         for key in tm_periods.keys():
             # only calc periodic returns if it's not the spot return
             if key != tm_period_spot[0]:
@@ -1301,7 +1321,7 @@ def change_analysis(src_df, src_col_topic='topic', src_col_rf=None,
                         cum_sum)
 
     # calc vols for compound + log returns
-    for ret in chg_streams:
+    for ret in chg_srs:
         for key in tm_periods.keys():
             if tm_periods[key][1] is True:
                 if key == tm_period_cum[0]:
