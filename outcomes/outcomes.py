@@ -1170,19 +1170,18 @@ def change_analysis(src_df, src_col_topic='topic', src_col_rf=None,
     tm_period_3y = ['3y', 3.]
     tm_period_5y = ['5y', 5.]
     tm_period_10y = ['10y', 10.]
-    # tm_period_wtd = ['wtd', 1 / 52]
-    # tm_period_mtd = ['mtd', 1 / 12]
-    # tm_period_qtd = ['qtd', 3 / 12]
-    # tm_period_ytd = ['ytd', 1.]
+    # TODO tm_period_wtd = ['wtd', 1 / 52]
+    # TODO tm_period_mtd = ['mtd', 1 / 12]
+    # TODO tm_period_qtd = ['qtd', 3 / 12]
+    # TODO tm_period_ytd = ['ytd', 1.]
     tm_period_cum = ['cum', 1.]
     all_tm_periods = [
         tm_period_spot, tm_period_1d, tm_period_1w,
         tm_period_2w, tm_period_1m, tm_period_6w,
         tm_period_2m, tm_period_3m, tm_period_6m,
         tm_period_1y, tm_period_2y, tm_period_3y,
-        tm_period_5y, tm_period_10y,  # tm_period_wtd,
-        # tm_period_mtd, tm_period_qtd, tm_period_ytd,
-        tm_period_cum
+        tm_period_5y, tm_period_10y, tm_period_cum
+        # tm_period_wtd, # tm_period_mtd, tm_period_qtd, tm_period_ytd
     ]
     tm_periods = {}
     for period in all_tm_periods:
@@ -1513,7 +1512,8 @@ def change_analysis(src_df, src_col_topic='topic', src_col_rf=None,
 def main(src_file='infile.xlsx', src_sheet='Sheet1', src_col_dt='date',
          src_col_topic='strategy', src_col_rfr='rfr', src_col_bmk='benchmark',
          tgt_file='outfile.xlsx', tgt_sheet='Sheet1'):
-    
+    """Sample main function to use outcomes."""
+
     # read source data
     xlsx = pd.ExcelFile(src_file)
     src_df = pd.read_excel(xlsx, src_sheet)
