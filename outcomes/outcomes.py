@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+"""A suite of tools to enable better data analysis for finance.
+
+The outcomes module is the sole module of the outcomes package. The module 
+provides a suite of classes and functions to perform more robust data analysis 
+for finance -- specifically financial markets.
+"""
 
 import numpy as np
 import pandas as pd
@@ -15,8 +21,10 @@ class Periodicity:
     
     Attributes:
         name (str): A human readable label for the periodicity.
-        min_days (float): Lower bound (in days) for autodetecting the periodicity.
-        max_days (float): Upper bound (in days) for autodetecting the periodicity.
+        min_days (float): Lower bound (in days) for autodetecting the 
+            periodicity.
+        max_days (float): Upper bound (in days) for autodetecting the 
+            periodicity.
         ann_factor (float): Factor used to annualize data.
     """
 
@@ -32,7 +40,7 @@ class TimePeriod:
     """A defined period of time to assist with common time period analysis.
 
     Attributes:
-        name (str): A short label for the time period e.g., 1w = one week.
+        name (str): A short label for the time period (e.g., 1w = one week).
         ann_factor (float): Factor used to annualize the time period.
         stat_flag (bool, optional). Boolean indicating if time period requires
             a minimum number of observations to be statistically useful.
@@ -41,23 +49,52 @@ class TimePeriod:
 
     def __init__(self, name, ann_factor, stat_flag=False):
         """Inits TimePeriod class using passed in attributes."""
+
         self.name = name
         self.ann_factor = ann_factor
         self.stat_flag = stat_flag
 
     def __str__(self):
         """Prints TimePeriod class' attributes in CSV-eqsue string."""
+
         return (self.name + ', ' + str(self.ann_factor) + ', ' +
                 str(self.stat_flag))
 
 
 class Drawdown:
+    """A multi-dimensional assessment of a series' peak-to-trough history.
+
+    Attributes:
+        name (str): [desc].
+        series (Pandas DataFrame): The series' analyzed for drawdowns.
+        count (int): The number of drawdowns occurred.
+        avg_size (float): The average drawdown size.
+        avg_periods (float): The average length of time for drawdowns.
+        med_size (float): The median drawdown size.
+        med_periods (float): The median length of time for drawdowns.
+        max_size_size (float): The maximum drawdown's size.
+        max_size_periods (int): The maximum drawdown's length of time.
+        max_size_start_dt (datetime): The start date of the maximum drawdown.
+        max_size_end_dt (datetime): The end date of the maximum drawdown.
+        max_length_size (float): The longest drawdown's maximum size.
+        max_length_periods (int): The longest drawdown's length of time.
+        max_length_start_dt (datetime): The start date of the longest drawdown.
+        max_length_end_dt (datetime): The end date of the longest drawdown.
+        curr_series (Pandas DataFrame): [desc].
+        curr_size (float): The size of current drawdown.
+        curr_max_size (float): The max size for current drawdown.
+        curr_periods (int): The length of the current drawdown.
+        curr_start_dt (datetime): The start date of the current drawdown.
+    """
+
     def __init__(self, name, series, count, avg_size, avg_periods,
                  med_size, med_periods, max_size_size, max_size_periods,
                  max_size_start_dt, max_size_end_dt, max_length_size,
                  max_length_periods, max_length_start_dt, max_length_end_dt,
                  curr_series, curr_size, curr_max_size, curr_periods,
                  curr_start_dt):
+        """Inits a Drawdown object with the passed in attributes."""
+
         self.name = name
         self.series = series
         self.count = count
@@ -81,36 +118,65 @@ class Drawdown:
 
 
 PDCY_DAILY_CALENDAR = Periodicity('daily_calendar', 0, 1, 365.25)
+"""The daily (calendar days) periodicity; annualizes using 365.25 days/yr."""
 PDCY_DAILY_TRADING = Periodicity('daily_trading', 1, 4, 252)
+"""The daily (trading days) periodicity; annualizes using 252 days/yr."""
 PDCY_WEEKLY = Periodicity('weekly', 4, 7, 52)
+"""The weekly periodicity; annualizes using 52 weeks/yr."""
 PDCY_BI_MONTHLY = Periodicity('bi-monthly', 7, 17, 24)
+"""The bi-monthly periodicity; annualizes using 24 bi-weeks/yr."""
 PDCY_MONTHLY = Periodicity('monthly', 17, 31, 12)
+"""The monthly periodicity; annualizes using 12 months/yr."""
 PDCY_SEMI_MONTHLY = Periodicity('semi-monthly', 31, 62, 6)
+"""The semi-monthly periodicity; annualizes using 6 semi-months/yr."""
 PDCY_QUARTERLY = Periodicity('quarterly', 62, 94, 4)
+"""The quarterly periodicity; annualizes using 4 quarters/yr."""
 PDCY_SEMI_ANNUALLY = Periodicity('semi-annually', 94, 184, 2)
+"""The semi-annual periodicity; annualizes using twice/yr."""
 PDCY_ANNUALLY = Periodicity('annually', 184, 366, 1)
+"""The annual periodicity; by definition already stated annually."""
 
 TP_SPOT = 'spot'
+"""The 'spot' TimePeriod. Used to reference the current one-period value."""
 TP_1D = '1d'
+"""The 1 day TimePeriod. If the periodicity is daily this matches TP_SPOT."""
 TP_1W = '1w'
+"""The one week TimePeriod."""
 TP_2W = '2w'
+"""The two week TimePeriod."""
 TP_1M = '1m'
+"""The one month TimePeriod."""
 TP_6W = '6w'
+"""The six week TimePeriod."""
 TP_2M = '2m'
+"""The two month TimePeriod."""
 TP_3M = '3m'
+"""The three month TimePeriod."""
 TP_6M = '6m'
+"""The six month TimePeriod."""
 TP_1Y = '1y'
+"""The one year TimePeriod."""
 TP_2Y = '2y'
+"""The two year TimePeriod."""
 TP_3Y = '3y'
+"""The three year TimePeriod."""
 TP_5Y = '5y'
+"""The five year TimePeriod."""
 TP_10Y = '10y'
-TP_WTD = 'wtd'  # 'to-date' future release
-TP_MTD = 'mtd'  # 'to-date' future release
-TP_QTD = 'qtd'  # 'to-date' future release
-TP_YTD = 'ytd'  # 'to-date' future release
+"""The ten year TimePeriod."""
+TP_WTD = 'wtd'
+"""The week-to-date TimePeriod; not implemented yet."""
+TP_MTD = 'mtd'
+"""The month-to-date TimePeriod; not implemented yet."""
+TP_QTD = 'qtd'
+"""The quarter-to-date TimePeriod; not implemented yet."""
+TP_YTD = 'ytd'
+"""The year-to-date TimePeriod; not implemented yet."""
 TP_CUM = 'cum'
+"""The cumulative TimePeriod; abbreviated as 'cum'."""
 
-MIN_OBS_THRESH = 6  # min num of observations necessary for certain statistics
+MIN_OBS_THRESH = 6
+"""min num of observations necessary for certain statistics; set to 6."""
 
 
 def create_tm_periods(srs_size, periodicity, periods=[]):
@@ -118,19 +184,19 @@ def create_tm_periods(srs_size, periodicity, periods=[]):
     
     Creates a set of valid TimePeriods that can be used with the time series
     data of interest. Will automatically drop TimePeriods that are too short
-    for relevance (based on periodiity) and too long based on series length.
+    for relevance (based on periodicity) and too long based on series length.
 
     Args:
         srs_size (int): The length/size of the time series data.
         periodicity (float): The periodicity of the time series data.
         periods (list of TimePeriods, optional): List of time periods to 
-            generate.
-            (default is empty)
+            generate. Uses all time periods by default.
+            (default is empty/all)
     
     Returns:
         list of TimePeriods: A list of TimePeriods based on the series size & 
-        periodicity and any passed in TimePeriods requested. Will drop 
-        nonsensical TimePeriods.
+        periodicity and any passed in TimePeriods requested. Drops nonsensical 
+        TimePeriods.
     """
 
     if periods == []:
@@ -269,7 +335,7 @@ def valid_period(period):
     """Checks to see if a period is valid.
 
     Args:
-        period: The period to be validated.
+        period (float): The period to be validated.
     
     Returns:
         bool: Returns true if the period is valid, false otherwise.
@@ -284,7 +350,9 @@ def valid_period(period):
 def return_to_level(returns, lvl_start_val=100, calc_method='cmp'):
     """Takes a series of returns and converts it to levels.
 
-    [longer desc]
+    An index level reflect a series of returns over time. If the returns passed 
+    are total returns, a total return level series is generated. This is useful 
+    if you want to easily interpret how much an asset's value grows over time.
 
     Args:
         returns (Pandas DataFrame of float). A return series in compound or log 
@@ -295,7 +363,7 @@ def return_to_level(returns, lvl_start_val=100, calc_method='cmp'):
             (default is compound)
     
     Returns:
-        Pandas DataFrame of float: A level series based on the returns passed in.
+        Pandas DataFrame of float: A level series based on the series' returns.
     """
 
     # create a new starting row for the initial level
@@ -316,21 +384,25 @@ def return_to_level(returns, lvl_start_val=100, calc_method='cmp'):
     return levels
 
 
-def excess_return(topic_ret, market_ret):
-    """Calculates excess returns of a topic series vs. a market series.
+def excess(topic_srs, ref_srs):
+    """Calculates the excess of a topic series vs. a reference series.
+
+    Excess is simply the difference between the topic series and a reference 
+    series. If passing returns, log returns should be used since the function 
+    simply subtracts to calculate the difference.
 
     Args:
-        topic_ret (Pandas DataFrame of float): The topic return series.
-        market_ret (Pandas DataFrame of float): The market return series.
+        topic_srs (Pandas DataFrame of float): The topic series.
+        market_srs (Pandas DataFrame of float): The reference series.
     
     Returns:
         Pandas DataFrame of float: The difference between the topic series and 
-        the market series.
+        the reference series.
     """
-    return topic_ret - market_ret
+    return topic_srs - ref_srs
 
 
-def rolling_chg(return_data, periods, annual_factor=12, annualize_flag=True,
+def rolling_chg(series_data, periods, annual_factor=12, annualize_flag=True,
                 cum=False, to_date=None):
     """Calculates a rolling change or returns (if passed log returns).
 
@@ -340,7 +412,7 @@ def rolling_chg(return_data, periods, annual_factor=12, annualize_flag=True,
     otherwise it will be a rolling diff.
 
     Args:
-        return_data (Pandas DataFrame of float): [desc].
+        series_data (Pandas DataFrame of float): [desc].
         periods (int): [desc].
         annual_factor (float): [desc].
         annualize_flag (bool, optional): [desc].
@@ -368,13 +440,13 @@ def rolling_chg(return_data, periods, annual_factor=12, annualize_flag=True,
     else:
         annualize = periods / annual_factor
 
-    return (return_data.rolling(window=periods,
+    return (series_data.rolling(window=periods,
                                 min_periods=periods).sum() / annualize
-            if cum is False else return_data.cumsum())
+            if cum is False else series_data.cumsum())
 
 
 def rolling_ols(y, X, periods, cum=False, to_date=None):
-    """Calculates a rolling least squares regression.
+    """Calculates a rolling single variate least squares regression.
 
     Args:
         y: Dependent variable for the regression.
@@ -396,7 +468,7 @@ def rolling_ols(y, X, periods, cum=False, to_date=None):
     ols_details = {'r2': None, 'r2-adj': None}
 
     # round periods to nearest int if it comes in as float
-    periods = int(np.round(periods)).astype(int)
+    periods = int(np.round(periods)) #.astype(int)
 
     # don't return values if being asked to calculate something shorter
     # than 1 period or not a multiple of the periodicity
@@ -582,24 +654,42 @@ def rolling_dd_series(ret, periods, cum=False):
     return ret_df
 
 
-def rolling_vol(return_data, periods, annual_factor=12, annualize_flag=True,
+def rolling_vol(series_data, periods, annual_factor=12, annualize_flag=True,
                 cum=False, semivol=None, semivol_threshold=None):
-    """Calculates an annualized volatility over a specified period.
+    """Calculates a volatility over a specified period.
 
-    [desc]
+    Volatility is simply the standard deviation over some time frame. The 
+    shorter the time period the less statistically useful vol is; however, 
+    long periods can also dampen volatility giving a false impression of risk. 
+    Most people believe volatility for financial data series is 'nonstationary' 
+    meaning volatility changes over time; therefore, analyzing rolling vol is 
+    useful to get a better understanding of how the risk changes over time. 
+    The function by default annualizes vol to make it easier to interpret. 
+    Semivol (i.e., the standard deviation of observations above or below some 
+    specific value) can also be calculated by passing in semivol and 
+    semivol_threshold values. Semivol can be useful for assessing the downside 
+    risk. Vol is just one measure of risk, blah blah blah, save us the lecture.
 
     Args:
-        return_data (Pandas DataFrame of float): [desc].
+        series_data (Pandas DataFrame of float): The series to calculate the 
+            vol of.
         periods (float): The rolling period's length of time.
-        annual_factor (float, optional): [desc].
+        annual_factor (float, optional): The factor used to annualize the vol.
             (default is 12)
-        annualize_flag (bool, optional): [desc].
+        annualize_flag (bool, optional): A flag to indicate whether or not vol 
+            should be stated annually.
             (default is True)
-        cum (bool, optional): [desc].
+        cum (bool, optional): Calculates a cumulative volatility instead of a 
+            rolling (moving window).
             (default is False)
-        semivol (int, optional). [desc].
+        semivol (int, optional). Flag indicating whether to calculate a semi 
+            vol or not. Defaults to calculate a normal vol, 1 uses series 
+            values above the semivol_threshold, any other number uses series 
+            values below the semivol_threshold. Similar concept to semibeta.
             (default is None)
-        semivol_threshold (float, optional): [desc].
+        semivol_threshold (float, optional): The threshold value used to 
+            determine which series values should be included in the semivol 
+            calculation.
             (default is None)
 
     Returns:
@@ -616,20 +706,20 @@ def rolling_vol(return_data, periods, annual_factor=12, annualize_flag=True,
 
     if cum is False:
         if semivol is None:
-            ret = return_data.rolling(window=periods).std()
+            ret = series_data.rolling(window=periods).std()
         elif semivol == 1:
-            ret = np.maximum(return_data,
+            ret = np.maximum(series_data,
                              semivol_threshold).rolling(window=periods).std()
         else:
-            ret = np.minimum(return_data,
+            ret = np.minimum(series_data,
                              semivol_threshold).rolling(window=periods).std()
     else:
         if semivol is None:
-            ret = return_data.expanding().std()
+            ret = series_data.expanding().std()
         elif semivol == 1:
-            ret = np.maximum(return_data, semivol_threshold).expanding().std()
+            ret = np.maximum(series_data, semivol_threshold).expanding().std()
         else:
-            ret = np.minimum(return_data, semivol_threshold).expanding().std()
+            ret = np.minimum(series_data, semivol_threshold).expanding().std()
 
     if annualize_flag is True:
         annualize = np.sqrt(annual_factor)
@@ -639,32 +729,91 @@ def rolling_vol(return_data, periods, annual_factor=12, annualize_flag=True,
     return ret * annualize
 
 
-def _risk_adj_ratio(topic_ret, hurdle_ret, risk_measure):
-    """Helper function to calculate risk adjusted return ratios.
+def _risk_adj_ratio(topic_srs, ref_srs, risk_measure):
+    """Helper function to calculate risk adjusted ratios.
+
+    Many 'risk-adjusted' measures are simply the excess between two series 
+    divided by some risk measure. For example, the Sharpe ratio is the excess 
+    return (return over the risk-free rate) divided by volatility. This helper 
+    function simply calcs the arithmetic difference (pass logs for returns!) of 
+    the passed in series and divides by the passed in risk measure.
+
+    Args:
+        topic_srs (Pandas DataFrame of float): The series of interest.
+        ref_srs (Pandas DataFrame of float): The reference/benchmark series.
+        risk_measure (Pandas DataFrame of float): The risk measure used to 
+            'adjust' the excess.
+    
+    Returns:
+        Pandas DataFrame of float: A risk-adjusted ratio series by calculating 
+        the excess divded by the risk measure. 
     """
 
-    return (topic_ret - hurdle_ret) / risk_measure
+    return excess(topic_srs, ref_srs) / risk_measure
 
 
-def sharpe(topic_ret, bmk_ret, asset_vol):
-    """Calcs the excess return per unit of asset vol.
+def sharpe(topic_srs, ref_srs, topic_vol):
+    """Calcs the topic's excess return per unit of topic vol.
+
+    Proposed by William Sharpe, the ratio of the topic series' return over the 
+    risk-free rate (e.g., short-term cash rate for global macro) dividend by 
+    the topic series' volatility.
+
+    Args:
+        topic_srs (Pandas DataFrame of float): The topic series of interest.
+        ref_srs (Pandas DataFrame of float): The risk-free series.
+        topic_vol (Pandas DataFrame of float): The volatility of the topic 
+            series.
+    
+    Returns:
+        Panadas DataFrame of float: The Sharpe ratio: excess return divided by 
+        volatility.
     """
     
-    return _risk_adj_ratio(topic_ret, bmk_ret, asset_vol)
+    return _risk_adj_ratio(topic_srs, ref_srs, topic_vol)
 
 
-def info_ratio(topic_ret, bmk_ret, active_vol):
+def info_ratio(topic_srs, ref_srs, active_vol):
     """Calcs the active return per unit of active vol.
+
+    The information ratio is similar to the Sharpe ratio; however, it uses the 
+    active return (i.e., the topic series' excess return v. some benchmark) 
+    divided by the active volatility (the standard deviaiton of returns v. that 
+    same benchamrk). Values of 1.0 and higher are usually considered top decile.
+
+    Args:
+        topic_srs (Pandas DataFrame of float): The topic series of interest.
+        ref_srs (Pandas DataFrame of float): A benchmark series.
+        active_vol (Pandas DataFrame of float): The volatility of the active 
+            return.
+    
+    Returns:
+        Panadas DataFrame of float: The information ratio: active return 
+        divided by active volatility.
     """
     
-    return _risk_adj_ratio(topic_ret, bmk_ret, active_vol)
+    return _risk_adj_ratio(topic_srs, ref_srs, active_vol)
 
 
-def sortino(topic_ret, bmk_ret, topic_downside_vol):
+def sortino(topic_srs, ref_srs, topic_downside_vol):
     """Calcs the excess return per unit of downside vol.
+
+    Investors are often more concerned with downside risk, so the Sortino 
+    ratio evaluates the excess or active return compared to only the downside 
+    volatility.
+
+    Args:
+        topic_srs (Pandas DataFrame of float): The topic series of interest.
+        ref_srs (Pandas DataFrame of float): A reference series.
+        active_vol (Pandas DataFrame of float): The downside volatility of the 
+            excess/active return.
+    
+    Returns:
+        Panadas DataFrame of float: The Sortino ratio: excess/active return 
+        divided by downside volatility.
     """
     
-    return _risk_adj_ratio(topic_ret, bmk_ret, topic_downside_vol)
+    return _risk_adj_ratio(topic_srs, ref_srs, topic_downside_vol)
 
 
 def vol_skew(vol_upside, vol_downside):
@@ -672,34 +821,48 @@ def vol_skew(vol_upside, vol_downside):
 
     The ratio of upside and downside volatilities is called the vol skew. 
     Uses std dev not variance unlike some defs to calculate.
+
+    Args:
+        vol_upside (Pandas DataFrame of float): The upside volatility.
+        vol_downside (Pandas DataFrame of float): The downside volatility.
+    
+    Returns:
+        Pandas DataFrame of float: The ratio of the upside to downside vol.
     """
     
     return vol_upside / vol_downside
 
 
-def mod_treynor(topic_ret, rf_ret, mkt_vol):
+def mod_treynor(topic_srs, rf_srs, mkt_vol):
     """Modified treynor calcs ratio of excess return to market volatility.
     
-    Treynor ratio calculation which is simply the excess return v. risk-free 
-    rate divided by the market volatility. Although we classify it as part of 
-    the excess return metric suite, it requires a benchmark return series 
-    to define what "the market" is.
+    Treynor ratio calculation which is simply the return v. risk-free rate 
+    divided by the market volatility. Although we classify it as part of the 
+    excess return metric suite, it requires a benchmark return series to 
+    define what 'the market' is.
+
+    Args:
+        topic_srs (Pandas DataFrame of float): The topic return series.
+        rf_srs (Pandas DataFrame of float): The risk-free return series.
+        mkt_vol (Pandas DataFrame of float): The market volatility series.
+    
+    Returns:
+        Pandas DataFrame of float: Excess return dividied by market volatility.
     """
     
-    return _risk_adj_ratio(topic_ret, rf_ret, mkt_vol)
+    return _risk_adj_ratio(topic_srs, rf_srs, mkt_vol)
 
 
-def rolling_corr(ret_stream_1, ret_stream_2, periods, cum=False):
+def rolling_corr(srs_1, srs_2, periods, cum=False):
     """Calculates rolling correlation.
 
     Correlations are ineherently unstable, so rolling correlation analysis 
-    helps build a more robust analysis.
+    helps provide a more robust analysis.
 
     Args:
-        ret_stream_1 (Pandas DataFrame of float): The first series to correlate.
-        ret_stream_2 (Pandas DataFrame of float): The second series to 
-            correlate.
-        periods (float): The rolling period's length of time.
+        srs_1 (Pandas DataFrame of float): The first series to correlate.
+        srs_2 (Pandas DataFrame of float): The second series to correlate.
+        periods (float): The number of periods in the rolling window.
         cum (bool, optional): Boolean to indicate if a cumulative calc should 
             be used.
             (default is False)
@@ -716,22 +879,22 @@ def rolling_corr(ret_stream_1, ret_stream_2, periods, cum=False):
     if not valid_period(periods) or (periods < MIN_OBS_THRESH):
         return np.nan
 
-    return (ret_stream_1.rolling(window=periods).corr(ret_stream_2)
-        if cum is False else ret_stream_1.expanding().corr(ret_stream_2))
+    return (srs_1.rolling(window=periods).corr(srs_2)
+        if cum is False else srs_1.expanding().corr(srs_2))
 
 
-def rolling_r2(ret_stream_1, ret_stream_2, periods, cum=False):
+def rolling_r2(srs_1, srs_2, periods, cum=False):
     """Calcs rolling R2 which is just corr^2.
 
-    The rolling R2 is simply the square of the correlation. So this function 
-    simply calls the rolling_correlation function.
+    The rolling R2 is the square of the correlation for single variate 
+    regression, so this function simply calls the rolling_correlation function.
 
     Args:
-        ret_stream_1 (Pandas DataFrame of float): The first data series to 
+        srs_1 (Pandas DataFrame of float): The first data series to 
             correlate.
-        ret_stream_2 (Pandas DataFrame of float): The second data series to 
+        srs_2 (Pandas DataFrame of float): The second data series to 
             correlate.
-        periods (float): The rolling period's length of time.
+        periods (float): The number of periods in the rolling window.
         cum (bool, optional): Boolean flag to indicate if the correlation is 
             cumulative or not.
             (default is False)
@@ -748,27 +911,34 @@ def rolling_r2(ret_stream_1, ret_stream_2, periods, cum=False):
     if not valid_period(periods) or (periods < MIN_OBS_THRESH):
         return np.nan
 
-    return rolling_corr(ret_stream_1, ret_stream_2, periods, cum) ** 2
+    return rolling_corr(srs_1, srs_2, periods, cum) ** 2
 
 
-def rolling_beta(ret_stream_topic, ret_stream_mkt, periods, cum=False,
-                 semibeta=None, semibeta_threshold=None):
-    """Calculates rolling beta.
+def rolling_beta(topic_srs, ref_srs, periods, cum=False, semibeta=None, 
+                 semibeta_threshold=None):
+    """Calculates the rolling beta of the topic series.
 
-    [longer desc]
+    A beta is the coefficient calculated in a single variable linear 
+    regression. In finance, the beta is one way to describe the sensitivity 
+    (or risk) of something against a benchmark. For example, if a stock is 
+    called 'high beta' it means that it's value changes an order of magnitude 
+    larger than the over stock market. Just like correlations, vols, and other 
+    measures, betas can move around a lot.
 
     Args:
-        ret_stream_topic (Pandas DataFrame of float): The dependent variable 
-            series.
-        ret_stream_mkt (Pandas DataFrame of float): The independent variable 
-            series.
-        periods (float): The rolling period's length of time.
+        topic_srs (Pandas DataFrame of float): The dependent variable series.
+        ref_srs (Pandas DataFrame of float): The independent variable series.
+        periods (float): The number of periods in the rolling window.
         cum (bool, optional): Boolean flag to indicate calculating a cumulative 
             beta or not.
             (default is False)
-        semibeta (int, optional): [desc].
+        semibeta (int, optional): Default of none calcs normal beta, 1 calcs 
+            the upside beta (beta above a threshold value), any other number 
+            calcs the downside beta (beta below a threshold value). Similar 
+            concept to semivol.
             (default is None)
-        semibeta_threshold (float, optional): [desc].
+        semibeta_threshold (float, optional): The threshold value to use when 
+            calculating a semibeta.
             (default is None)
     """
 
@@ -780,8 +950,8 @@ def rolling_beta(ret_stream_topic, ret_stream_mkt, periods, cum=False,
     if not valid_period(periods) or (periods < MIN_OBS_THRESH):
         return np.nan
 
-    rs_topic = ret_stream_topic.copy()
-    rs_mkt = ret_stream_mkt.copy()
+    rs_topic = topic_srs.copy()
+    rs_mkt = ref_srs.copy()
 
     if semibeta == 1:
         rs_mkt = np.maximum(rs_mkt, semibeta_threshold)
@@ -802,7 +972,7 @@ def rolling_beta(ret_stream_topic, ret_stream_mkt, periods, cum=False,
     return covar / var
 
 
-def jensens_alpha(topic_ret, bmk_ret, rf_ret, beta):
+def jensens_alpha(topic_srs, ref_srs, rf_srs, beta):
     """Calculates jensen's alpha.
 
     Jensen's alpha calculates a risk-adjusted excess return. Many asset 
@@ -812,62 +982,88 @@ def jensens_alpha(topic_ret, bmk_ret, rf_ret, beta):
     returns against their benchmark returns.
 
     Args:
-        topic_ret (Pandas DataFrame of float): [desc].
-        bmk_ret (Pandas DataFrame of float): [desc].
-        rf_ret (Pandas DataFrame of float): [desc].
-        beta (Pandas DataFrame of float): [desc].
+        topic_srs (Pandas DataFrame of float): The topic series of interest.
+        bmk_srs (Pandas DataFrame of float): The benchmark series to calculate 
+            alpha / risk-adjusted outperformance against.
+        rf_srs (Pandas DataFrame of float): The risk-free rate series.
+        beta (Pandas DataFrame of float): The topic series beta (v. the 
+            benchmark series).
     
     Returns:
         float: Jensen's alpha.
     """
 
-    return topic_ret - rf_ret - (beta * (bmk_ret - rf_ret))
+    return topic_srs - rf_srs - (beta * (ref_srs - rf_srs))
 
 
-def m2(topic_ret, topic_vol, sharpe, mkt_vol, cum=False, annual_factor=1):
+def m2(topic_srs, topic_vol, sharpe, ref_vol, cum=False, annual_factor=1):
     """Calcs m2 return which is a port to mkt vol adjusted return measure.
     
-    The Sharpe ratio can be difficult to interpres, so M2 takes a sharpe and 
-    translates it into a return nummber.
+    The Sharpe ratio can be difficult to interpret since it's a ratio, so M2 
+    converts a Sharpe to a return number.
 
     Args:
-        topic_ret (Pandas DataFrame of float): [desc].
-        topic_vol (Pandas DataFrame of float): [desc].
-        sharpe (Pandas DataFrame of float): [desc].
-        mkt_vol (Pandas DataFrame of float): [desc].
-        cum (bool, optional): Boolean flag to inidicate calculating a cumulative
-            value.
+        topic_srs (Pandas DataFrame of float): The series of interest.
+        topic_vol (Pandas DataFrame of float): The volatility of the topic 
+            series.
+        sharpe (Pandas DataFrame of float): The Sharpe ratio of the topic.
+        ref_vol (Pandas DataFrame of float): The reference series' volatility. 
+            The M2 return calculated with be comparable to this reference 
+            series' return.
+        cum (bool, optional): Boolean flag to inidicate calculating a 
+            cumulative value.
             (default is False)
         annual_factor (float, optional): The factor used to annualize the M2 
             value.
             (default is 1)
     
     Returns:
-        Pantas DataFrame of float: M2.
+        Pantas DataFrame of float: M2 return.
     """
 
-    return (topic_ret + (sharpe * (mkt_vol - topic_vol))) * annual_factor
+    return (topic_srs + (sharpe * (ref_vol - topic_vol))) * annual_factor
 
 
-def m2_excess(ret_m2, ret_bmk):
-    """Calcs the m2 excess return v. benchmark.
+def m2_excess(topic_m2_srs, ref_srs):
+    """Calcs the m2 excess return v. the reference.
 
     Args:
-        ret_m2 (Panads DataFrame of float): An m2 return or series of returns.
-        ret_bmk (Pandas DataFrame of float): The benchmark return or series of 
+        topic_m2_srs (Panads DataFrame of float): An m2 return or series of returns.
+        ret_srs (Pandas DataFrame of float): The benchmark return or series of 
             returns.
     
     Returns:
         Pandas DataFrame of float: An excess return series.
     """
     
-    return ret_m2 - ret_bmk
+    return excess(topic_m2_srs, ref_srs)
 
 
 def change_analysis(src_df, src_col_topic='topic', src_col_rf=None,
                     src_col_bmk=None, annualize_flag=True, tm_periods=None,
                     measures=None):
     """Generates all of the change analytics data from a Pandas DataFrame.
+
+    [longer desc]
+
+    Args:
+        src_df (Pandas DataFrame): The source data set.
+        src_col_topic (str, optional): Column name of the topic series.
+            (default is 'topic')
+        src_col_rf (str, optional): Column name of the risk-free series.
+            (default is None)
+        src_col_bmk (str, optional): Column name of the benchmark/reference 
+            series.
+            (default is None)
+        annualize_flag (bool, optional): Indicates whether calculations should 
+            be stated annually.
+            (default is True)
+        tm_periods (list of TimePeriod): [needs implementation].
+        measures (list of str): [needs implementation].
+    
+    Returns:
+        Pandas DataFrame: A complete change analysis using the measures and 
+        time periods specified (default all).
     """
     
     # create change series data structure
@@ -876,7 +1072,7 @@ def change_analysis(src_df, src_col_topic='topic', src_col_rf=None,
     srs_type_bmk = 'bmk'
     srs_type_excess = 'excess'
     srs_type_active = 'active'
-    chg_streams = [
+    chg_srs = [
         srs_type_topic,
         srs_type_rf,
         srs_type_bmk,
@@ -887,7 +1083,7 @@ def change_analysis(src_df, src_col_topic='topic', src_col_rf=None,
     level_ln = 'level_ln'
     chg_rel = 'chg_rel'  # the relative change, aka the compound return
     chg_abs = 'chg_abs'  # the absolute change in the level
-    chg_ln = 'chg_ln'  # log returns, the absolute change in the log level
+    chg_ln = 'chg_ln'  # the absolute change in the log level
     vol_lvl = 'vol_lvl'  # vol of the level of the series
     vol_lvl_ln = 'vol_lvl_ln'  # vol of the log level of the series
     vol_cmp = 'vol_cmp'  # vol of relative changes/compound returns
@@ -974,19 +1170,18 @@ def change_analysis(src_df, src_col_topic='topic', src_col_rf=None,
     tm_period_3y = ['3y', 3.]
     tm_period_5y = ['5y', 5.]
     tm_period_10y = ['10y', 10.]
-    # tm_period_wtd = ['wtd', 1 / 52]
-    # tm_period_mtd = ['mtd', 1 / 12]
-    # tm_period_qtd = ['qtd', 3 / 12]
-    # tm_period_ytd = ['ytd', 1.]
+    # TODO tm_period_wtd = ['wtd', 1 / 52]
+    # TODO tm_period_mtd = ['mtd', 1 / 12]
+    # TODO tm_period_qtd = ['qtd', 3 / 12]
+    # TODO tm_period_ytd = ['ytd', 1.]
     tm_period_cum = ['cum', 1.]
     all_tm_periods = [
         tm_period_spot, tm_period_1d, tm_period_1w,
         tm_period_2w, tm_period_1m, tm_period_6w,
         tm_period_2m, tm_period_3m, tm_period_6m,
         tm_period_1y, tm_period_2y, tm_period_3y,
-        tm_period_5y, tm_period_10y,  # tm_period_wtd,
-        # tm_period_mtd, tm_period_qtd, tm_period_ytd,
-        tm_period_cum
+        tm_period_5y, tm_period_10y, tm_period_cum
+        # tm_period_wtd, # tm_period_mtd, tm_period_qtd, tm_period_ytd
     ]
     tm_periods = {}
     for period in all_tm_periods:
@@ -1012,7 +1207,6 @@ def change_analysis(src_df, src_col_topic='topic', src_col_rf=None,
 
     # create change/return time period columns
     cols = []
-
     for key in src_chg_streams:
         cols.append([key, level, tm_period_spot[0]])
         cols.append([key, level_ln, tm_period_spot[0]])
@@ -1028,7 +1222,7 @@ def change_analysis(src_df, src_col_topic='topic', src_col_rf=None,
             cols.append([key, chg_ln, key2])
 
     # create vol time period columns
-    for key in chg_streams:
+    for key in chg_srs:
         for key2 in tm_periods.keys():
             if tm_periods[key2][1] is True:
                 cols.append([key, vol_cmp, key2])
@@ -1079,20 +1273,20 @@ def change_analysis(src_df, src_col_topic='topic', src_col_rf=None,
             df[key][level][tm_period_spot[0]].diff(1)
 
     # calc excess returns
-    df.loc[:, (srs_type_excess, chg_ln, tm_period_spot[0])] = excess_return(
+    df.loc[:, (srs_type_excess, chg_ln, tm_period_spot[0])] = excess(
             df[srs_type_topic][chg_ln][tm_period_spot[0]],
             df[srs_type_rf][chg_ln][tm_period_spot[0]])
     df.loc[:, (srs_type_excess, chg_rel, tm_period_spot[0])] = np.exp(
             df[srs_type_excess][chg_ln][tm_period_spot[0]]) - 1
 
     # calc active returns
-    df.loc[:, (srs_type_active, chg_ln, tm_period_spot[0])] = excess_return(
+    df.loc[:, (srs_type_active, chg_ln, tm_period_spot[0])] = excess(
             df[srs_type_topic][chg_ln][tm_period_spot[0]],
             df[srs_type_bmk][chg_ln][tm_period_spot[0]])
     df.loc[:, (srs_type_active, chg_rel, tm_period_spot[0])] = np.exp(
             df[srs_type_active][chg_ln][tm_period_spot[0]]) - 1
 
-    for ret in chg_streams:
+    for ret in chg_srs:
         for key in tm_periods.keys():
             # only calc periodic returns if it's not the spot return
             if key != tm_period_spot[0]:
@@ -1126,7 +1320,7 @@ def change_analysis(src_df, src_col_topic='topic', src_col_rf=None,
                         cum_sum)
 
     # calc vols for compound + log returns
-    for ret in chg_streams:
+    for ret in chg_srs:
         for key in tm_periods.keys():
             if tm_periods[key][1] is True:
                 if key == tm_period_cum[0]:
@@ -1318,7 +1512,8 @@ def change_analysis(src_df, src_col_topic='topic', src_col_rf=None,
 def main(src_file='infile.xlsx', src_sheet='Sheet1', src_col_dt='date',
          src_col_topic='strategy', src_col_rfr='rfr', src_col_bmk='benchmark',
          tgt_file='outfile.xlsx', tgt_sheet='Sheet1'):
-    
+    """Sample main function to use outcomes."""
+
     # read source data
     xlsx = pd.ExcelFile(src_file)
     src_df = pd.read_excel(xlsx, src_sheet)
