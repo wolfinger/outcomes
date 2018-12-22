@@ -5,6 +5,7 @@ outcomes: more effective financial analysis
    :maxdepth: 2
    :caption: Contents:
 
+   readme <README>
    modules
 
 

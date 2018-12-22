@@ -15,8 +15,8 @@ two primary uses for this python package:
     the following nomenclature is used for returns data structure:
 
         series types:
-            topic: source data series; e.g., an asset's price level,
-                an index's total return level, a trading strategy, etc.
+            topic: source data series (e.g., an asset's price level,
+                an index's total return level, a trading strategy, etc.)
             rf: the risk-free asset
             bmk: the benchmark
             excess: the topic series over/under the risk-free series
@@ -46,15 +46,28 @@ two primary uses for this python package:
 ## release history
 
 * unreleased
-    * documentation (ongoing effort to make this useful to people)
     * logically structure everything; kinda a hack job right now
+    * documentation (ongoing effort to make this useful to devs)
+    * front end (eventual effort to make this useful to normals)
     * turn time periods and data structure into classes
-    * allow for dynamically choosing which measures to calc
     * allow for passing in compound or log returns
     * build the drawdown algo using my brain instead of brute force
     * annualize and de-annualize functions
 
-* 0.0.3 - [yyyy-mm-dd]
+* 0.0.4 - 2018-12-22
+    * NOTES
+        * Plan (hopefully) for next version to be materially re-designed. I've hacked together this from my own internal use and to make it useful for others requires logical restructuring of things.
+        * If you're a dev, this implies things will break next release...
+    * ADD
+        * Test script (although doesn't use unittest or similar framework)
+    * CHANGE
+        * change_analysis function can now take dynamic time period and measures
+          lists
+        * Misc clean-up of documentation
+        * Corrected README v0.0.3 release date
+        * Some lines are longer than 80 chars...style police shoot me
+
+* 0.0.3 - 2018-12-13
     * ADD
         * Sphinx documentation (in 'docs' folder)
     * CHANGE
@@ -76,7 +89,7 @@ greg wolfinger - [@direwolfinger](https://twitter.com/direwolfinger) - greg@wolf
 
 distributed under the MIT license. see ''LICENSE'' for more information.
 
-[https://github.com/wolfinger/outcomes](https://github.com/wolfinger)
+[https://github.com/wolfinger/outcomes](https://github.com/wolfinger/outcomes)
 
 
 ## contributing
