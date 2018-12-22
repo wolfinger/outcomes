@@ -55,7 +55,7 @@ class TimePeriod:
         self.stat_flag = stat_flag
 
     def __str__(self):
-        """Prints TimePeriod class' attributes in CSV-eqsue string."""
+        """Prints TimePeriod class' attributes in CSV-esque string."""
 
         return (self.name + ', ' + str(self.ann_factor) + ', ' +
                 str(self.stat_flag))
@@ -80,7 +80,7 @@ class Drawdown:
         max_length_periods (int): The longest drawdown's length of time.
         max_length_start_dt (datetime): The start date of the longest drawdown.
         max_length_end_dt (datetime): The end date of the longest drawdown.
-        curr_series (Pandas DataFrame): [desc].
+        curr_series (Pandas DataFrame): The actaul drawdown series [TODO].
         curr_size (float): The size of current drawdown.
         curr_max_size (float): The max size for current drawdown.
         curr_periods (int): The length of the current drawdown.
@@ -115,6 +115,183 @@ class Drawdown:
         self.curr_max_size = curr_max_size
         self.curr_periods = curr_periods
         self.curr_start_dt = curr_start_dt
+
+
+class Measures:
+    """Suite of measures that outcomes can generate.
+
+    A helper class that lists the names of measures that the outcomes pacakge 
+    can generate. The measure names can be overriden at class intantiation 
+    to output user desired names.
+
+    Attributes:
+        level (str): [desc].
+        level_ln (str): log level of the measure.
+        chg_rel (str): the relative change, aka the compound return.
+        chg_abs (str): the absolute change in the level.
+        chg_ln (str): the absolute change in the log level.
+        vol_lvl (str): vol of the level of the series.
+        vol_lvl_ln (str): vol of the log level of the series.
+        vol_cmp (str): vol of relative changes/compound returns.
+        vol_ln (str): vol of log level changes/log returns.
+        sharpe_ln (str): Sharpe ratio using log measures.
+        info_ratio_ln (str): information ratio using log measures.
+        vol_downside_ln (str): downside vol using log measures.
+        vol_upside_ln (str): upside vol using log measures.
+        sortino_ln (str): Sortino ratio using log measures.
+        vol_skew_ln (str): vol skew using log measures.
+        mod_treynor_ln (str): modified Treynor ratio using log measures.
+        corr_lvl (str): correlation of the levels of two measures.
+        corr_lvl_ln (str): correlaiton of the log levels of two measures.
+        corr_ln (str): correlation of the log changes of two measures.
+        r2_ln (str): the R2 of a dependent measure against an 
+            independent measure (in log terms).
+        beta_ln (str): the beta of a depedent measure against an independent 
+            measure (in log terms).
+        beta_up_ln (str): the upside beta (in log terms).
+        beta_down_ln (str): the downside beta (in log terms).
+        jensens_alpha_ln (str): Jensen's alpha (in log terms).
+        m2_ln (str): M2 (in log terms).
+        m2_excess_ln (str): M2 excess against a reference series (in log terms).
+        dd_series_cmp (str): The actual drawdown series (in compound terms).
+        dd_count_cmp (str): The count of drawdowns in a series.
+        dd_avg_size_cmp (str): The average size of drawdowns in a series (in 
+            compound terms).
+        dd_avg_periods_cmp (str): The average length of drawdowns in a series.
+        dd_med_size_cmp (str): The meidan size of drawdowns in a series (in 
+            compound terms).
+        dd_med_periods_cmp (str): The median legnth of drawdowns in a series.
+        dd_max_size_cmp (str): The maximum drawdown size of a series (in 
+            compound terms).
+        dd_max_size_periods_cmp (str): The length of the maximum size drawdown.
+        dd_max_size_start_cmp (str): The start date of the maximum size 
+            drawdown.
+        dd_max_size_end_cmp (str): The end date of the maximum size drawdown.
+        dd_max_length_size_cmp (str): The size of the longest running drawdown 
+            in a series (in compound terms).
+        dd_max_length_cmp (str): The length of the longest running drawdown.
+        dd_max_length_start_cmp (str): The start date of the longest running 
+            drawdown.
+        dd_max_length_end_cmp (str): The end date of the longest running 
+            drawdown.
+        dd_curr_series_cmp (str): The current drawdown series (in compound 
+            terms).
+        dd_curr_size_cmp (str): The size of the current drawdown (in compound 
+            terms).
+        dd_curr_max_size_cmp (str): The maximum size of the current drawdown 
+            (in compound terms).
+        dd_curr_length_cmp (str): The length of the current drawdown.
+        dd_curr_start_cmp (str): The start date of the current drawdown.
+        dd_cmp (array): The array of drawdown metrics for a series.
+    """
+
+    DRAWDOWN = 'drawdown'
+    """Constant used to flag the entire drawdown metric suite."""
+
+    def __init__(self, level = 'level', level_ln = 'level_ln', 
+                 chg_rel = 'chg_rel', chg_abs = 'chg_abs', chg_ln = 'chg_ln', 
+                 vol_lvl = 'vol_lvl', vol_lvl_ln = 'vol_lvl_ln', 
+                 vol_cmp = 'vol_cmp', vol_ln = 'vol_ln', 
+                 sharpe_ln = 'sharpe_ln', info_ratio_ln = 'info_ratio_ln', 
+                 vol_downside_ln = 'vol_downside_ln', 
+                 vol_upside_ln = 'vol_upside_ln', sortino_ln = 'sortino_ln', 
+                 vol_skew_ln = 'vol_skew_ln', mod_treynor_ln = 'mod_treynor_ln',
+                 corr_lvl = 'corr_lvl', corr_lvl_ln = 'corr_lvl_ln', 
+                 corr_ln = 'corr_ln', r2_ln = 'r2_ln', beta_ln = 'beta_ln', 
+                 beta_up_ln = 'beta_up_ln', beta_down_ln = 'beta_down_ln', 
+                 jensens_alpha_ln = 'jensens_alpha_ln', m2_ln = 'm2_ln', 
+                 m2_excess_ln = 'm2_excess_ln', dd_series_cmp = 'dd_series_cmp',
+                 dd_count_cmp = 'dd_count_cmp', 
+                 dd_avg_size_cmp = 'dd_avg_size_cmp', 
+                 dd_avg_periods_cmp = 'dd_avg_periods_cmp', 
+                 dd_med_size_cmp = 'dd_med_size_cmp', 
+                 dd_med_periods_cmp = 'dd_med_periods_cmp', 
+                 dd_max_size_cmp = 'dd_max_size_cmp', 
+                 dd_max_size_periods_cmp = 'dd_max_size_periods_cmp', 
+                 dd_max_size_start_cmp = 'dd_max_size_start_cmp', 
+                 dd_max_size_end_cmp = 'dd_max_size_end_cmp', 
+                 dd_max_length_size_cmp = 'dd_max_legnth_size_cmp', 
+                 dd_max_length_cmp = 'dd_max_length_cmp', 
+                 dd_max_length_start_cmp = 'dd_max_length_start_cmp', 
+                 dd_max_length_end_cmp = 'dd_max_length_end_cmp', 
+                 dd_curr_series_cmp = 'dd_curr_series_cmp', 
+                 dd_curr_size_cmp = 'dd_curr_size_cmp', 
+                 dd_curr_max_size_cmp = 'dd_curr_max_size_cmp', 
+                 dd_curr_length_cmp = 'dd_curr_length_cmp', 
+                 dd_curr_start_cmp = 'dd_curr_start_cmp'):
+        """Init the Measures class."""
+
+        self.level = level
+        self.level_ln = level_ln
+        self.chg_rel = chg_rel
+        self.chg_abs = chg_abs
+        self.chg_ln = chg_ln
+        self.vol_lvl = vol_lvl
+        self.vol_lvl_ln = vol_lvl_ln
+        self.vol_cmp = vol_cmp
+        self.vol_ln = vol_ln
+        self.sharpe_ln = sharpe_ln
+        self.info_ratio_ln = info_ratio_ln
+        self.vol_downside_ln = vol_downside_ln
+        self.vol_upside_ln = vol_upside_ln
+        self.sortino_ln = sortino_ln
+        self.vol_skew_ln = vol_skew_ln
+        self.mod_treynor_ln = mod_treynor_ln
+        self.corr_lvl = corr_lvl
+        self.corr_lvl_ln = corr_lvl_ln
+        self.corr_ln = corr_ln
+        self.r2_ln = r2_ln
+        self.beta_ln = beta_ln
+        self.beta_up_ln = beta_up_ln
+        self.beta_down_ln = beta_down_ln
+        self.jensens_alpha_ln = jensens_alpha_ln
+        self.m2_ln = m2_ln
+        self.m2_excess_ln = m2_excess_ln
+        self.dd_series_cmp = dd_series_cmp
+        self.dd_count_cmp = dd_count_cmp
+        self.dd_avg_size_cmp = dd_avg_size_cmp
+        self.dd_avg_periods_cmp = dd_avg_periods_cmp
+        self.dd_med_size_cmp = dd_med_size_cmp
+        self.dd_med_periods_cmp = dd_med_periods_cmp
+        self.dd_max_size_cmp = dd_max_size_cmp
+        self.dd_max_size_periods_cmp = dd_max_size_periods_cmp
+        self.dd_max_size_start_cmp = dd_max_size_start_cmp
+        self.dd_max_size_end_cmp = dd_max_size_end_cmp
+        self.dd_max_length_size_cmp = dd_max_length_size_cmp
+        self.dd_max_length_cmp = dd_max_length_cmp
+        self.dd_max_length_start_cmp = dd_max_length_start_cmp
+        self.dd_max_length_end_cmp = dd_max_length_end_cmp
+        self.dd_curr_series_cmp = dd_curr_series_cmp
+        self.dd_curr_size_cmp = dd_curr_size_cmp
+        self.dd_curr_max_size_cmp = dd_curr_max_size_cmp
+        self.dd_curr_length_cmp = dd_curr_length_cmp
+        self.dd_curr_start_cmp = dd_curr_start_cmp
+        self.dd_cmp = [
+            self.dd_series_cmp,
+            self.dd_count_cmp,
+            self.dd_avg_size_cmp,
+            self.dd_avg_periods_cmp,
+            self.dd_med_size_cmp,
+            self.dd_med_periods_cmp,
+            self.dd_max_size_cmp,
+            self.dd_max_size_periods_cmp,
+            self.dd_max_size_start_cmp,
+            self.dd_max_size_end_cmp,
+            self.dd_max_length_size_cmp,
+            self.dd_max_length_cmp,
+            self.dd_max_length_start_cmp,
+            self.dd_max_length_end_cmp,
+            self.dd_curr_series_cmp,
+            self.dd_curr_size_cmp,
+            self.dd_curr_max_size_cmp,
+            self.dd_curr_length_cmp,
+            self.dd_curr_start_cmp
+        ]
+
+    def __iter__(self):
+        for attr in self.__dict__.keys():
+            if not attr.startswith('__'):
+                yield attr
 
 
 PDCY_DAILY_CALENDAR = Periodicity('daily_calendar', 0, 1, 365.25)
@@ -1040,8 +1217,9 @@ def m2_excess(topic_m2_srs, ref_srs):
 
 
 def change_analysis(src_df, src_col_topic='topic', src_col_rf=None,
-                    src_col_bmk=None, annualize_flag=True, tm_periods=None,
-                    measures=None):
+                    src_col_bmk=None, annualize_flag=True, periods=[],
+                    measures=[], m_lbls=Measures(), 
+                    measures_exclude_flag=False):
     """Generates all of the change analytics data from a Pandas DataFrame.
 
     [longer desc]
@@ -1058,8 +1236,22 @@ def change_analysis(src_df, src_col_topic='topic', src_col_rf=None,
         annualize_flag (bool, optional): Indicates whether calculations should 
             be stated annually.
             (default is True)
-        tm_periods (list of TimePeriod): [needs implementation].
-        measures (list of str): [needs implementation].
+        periods (list of TimePeriod, optional): List of rolling time periods 
+            to analyze.
+            (default is empty list)
+        measures (list of str, optional): A list of measures to be calculated. 
+            If no measure list is specified, all supported measures are 
+            calculated.
+            (default is empty list)
+        m_lbls (Measures, optional): A Measures object that defines 
+            the labels for each measure. If no object is passed, all measures 
+            use their default labels.
+            (default is a Measures instance)
+        measures_exclude_flag (bool, optional): Flag to indicate whether to 
+            exclude the list of measures passed in from being calculated. To 
+            exclude the drawdown metrics, add Measures.DRAWDOWN as an item to 
+            the measures list.
+            (default is False)
     
     Returns:
         Pandas DataFrame: A complete change analysis using the measures and 
@@ -1079,125 +1271,26 @@ def change_analysis(src_df, src_col_topic='topic', src_col_rf=None,
         srs_type_excess,
         srs_type_active
     ]
-    level = 'level'
-    level_ln = 'level_ln'
-    chg_rel = 'chg_rel'  # the relative change, aka the compound return
-    chg_abs = 'chg_abs'  # the absolute change in the level
-    chg_ln = 'chg_ln'  # the absolute change in the log level
-    vol_lvl = 'vol_lvl'  # vol of the level of the series
-    vol_lvl_ln = 'vol_lvl_ln'  # vol of the log level of the series
-    vol_cmp = 'vol_cmp'  # vol of relative changes/compound returns
-    vol_ln = 'vol_ln'  # vol of log level changes/log returns
-    sharpe_ln = 'sharpe_ln'
-    info_ratio_ln = 'info_ratio_ln'
-    vol_downside_ln = 'vol_downside_ln'
-    vol_upside_ln = 'vol_upside_ln'
-    sortino_ln = 'sortino_ln'
-    vol_skew_ln = 'vol_skew_ln'
-    mod_treynor_ln = 'mod_treynor_ln'
-    corr_lvl = 'corr_lvl'
-    corr_lvl_ln = 'corr_lvl_ln'
-    corr_ln = 'corr_ln'
-    r2_ln = 'r2_ln'
-    beta_ln = 'beta_ln'
-    beta_up_ln = 'beta_up_ln'
-    beta_down_ln = 'beta_down_ln'
-    jensens_alpha_ln = 'jensens_alpha_ln'
-    m2_ln = 'm2_ln'
-    m2_excess_ln = 'm2_excess_ln'
-    dd_series_cmp = 'dd_series_cmp'
-    dd_count_cmp = 'dd_count_cmp'
-    dd_avg_size_cmp = 'dd_avg_size_cmp'
-    dd_avg_periods_cmp = 'dd_avg_periods_cmp'
-    dd_med_size_cmp = 'dd_med_size_cmp'
-    dd_med_periods_cmp = 'dd_med_periods_cmp'
-    dd_max_size_cmp = 'dd_max_size_cmp'
-    dd_max_size_periods_cmp = 'dd_max_size_periods_cmp'
-    dd_max_size_start_cmp = 'dd_max_size_start_cmp'
-    dd_max_size_end_cmp = 'dd_max_size_end_cmp'
-    dd_max_length_size_cmp = 'dd_max_legnth_size_ln'
-    dd_max_length_cmp = 'dd_max_length_cmp'
-    dd_max_length_start_cmp = 'dd_max_length_start_cmp'
-    dd_max_length_end_cmp = 'dd_max_length_end_cmp'
-    dd_curr_series_cmp = 'dd_curr_series_cmp'
-    dd_curr_size_cmp = 'dd_curr_size_cmp'
-    dd_curr_max_size_cmp = 'dd_curr_max_size_cmp'
-    dd_curr_length_cmp = 'dd_curr_length_cmp'
-    dd_curr_start_cmp = 'dd_curr_start_cmp'
-    dd_cmp = [
-        dd_series_cmp,
-        dd_count_cmp,
-        dd_avg_size_cmp,
-        dd_avg_periods_cmp,
-        dd_med_size_cmp,
-        dd_med_periods_cmp,
-        dd_max_size_cmp,
-        dd_max_size_periods_cmp,
-        dd_max_size_start_cmp,
-        dd_max_size_end_cmp,
-        dd_max_length_size_cmp,
-        dd_max_length_cmp,
-        dd_max_length_start_cmp,
-        dd_max_length_end_cmp,
-        dd_curr_series_cmp,
-        dd_curr_size_cmp,
-        dd_curr_max_size_cmp,
-        dd_curr_length_cmp,
-        dd_curr_start_cmp
-    ]
+ 
+    # set default measure list to all if none passed in
+    if not measures:
+        for measure in m_lbls:
+            measures.append(measure)
+    
+    # remove measures if the list passed in meant to exclude
+    if measures_exclude_flag == True:
+        tmp_measures = []
+        for measure in m_lbls:
+            if (measure not in measures) and not ((Measures.DRAWDOWN in 
+                                                   measures) and 
+                                                  ('dd' in measure)):
+                tmp_measures.append(measure)
+        measures = tmp_measures
 
     # create time periods windows
     the_periodicity = get_periodicity(src_df.index)
     periodicity = the_periodicity.ann_factor
-    create_tm_periods(src_df.index.size, the_periodicity)
-
-    # spot time period is the lowest level return period possible based
-    # on periodicity of the input time series
-    tm_period_spot = ['spot', 1 / periodicity]
-
-    tm_period_1d = ['1d', 1 / PDCY_DAILY_CALENDAR.ann_factor]
-    if periodicity == PDCY_DAILY_TRADING.ann_factor:
-        tm_period_1d[1] = 1 / periodicity
-    tm_period_1w = ['1w', 1 / 52]
-    tm_period_2w = ['2w', 2 / 52]
-    tm_period_1m = ['1m', 1 / 12]  # if daily -> 30 calendar, 21 trading
-    tm_period_6w = ['6w', 6 / 52]
-    tm_period_2m = ['2m', 2 / 12]  # if daily -> 61 calendar, 42 trading
-    tm_period_3m = ['3m', 3 / 12]  # if daily -> 91 calendar, 63 trading
-    tm_period_6m = ['6m', 6 / 12]  # if daily -> 183 calendar, 126 trading
-    tm_period_1y = ['1y', 1.]
-    tm_period_2y = ['2y', 2.]
-    tm_period_3y = ['3y', 3.]
-    tm_period_5y = ['5y', 5.]
-    tm_period_10y = ['10y', 10.]
-    # TODO tm_period_wtd = ['wtd', 1 / 52]
-    # TODO tm_period_mtd = ['mtd', 1 / 12]
-    # TODO tm_period_qtd = ['qtd', 3 / 12]
-    # TODO tm_period_ytd = ['ytd', 1.]
-    tm_period_cum = ['cum', 1.]
-    all_tm_periods = [
-        tm_period_spot, tm_period_1d, tm_period_1w,
-        tm_period_2w, tm_period_1m, tm_period_6w,
-        tm_period_2m, tm_period_3m, tm_period_6m,
-        tm_period_1y, tm_period_2y, tm_period_3y,
-        tm_period_5y, tm_period_10y, tm_period_cum
-        # tm_period_wtd, # tm_period_mtd, tm_period_qtd, tm_period_ytd
-    ]
-    tm_periods = {}
-    for period in all_tm_periods:
-        # don't include rolling periods longer than input series
-        # or short intertemporal periods for monthly series
-        if ((period[1] * periodicity < src_df.index.size and
-             not (1 < period[1] * periodicity < 2)) or
-                (period[0] == 'cum')):
-            if period[1] * periodicity >= 1:
-                # flag periods that require a min observation threshold
-                # for certain statistics
-                if period[1] * periodicity >= MIN_OBS_THRESH:
-                    stat_flag = True
-                else:
-                    stat_flag = False
-                tm_periods[period[0]] = [period[1], stat_flag]
+    tm_periods = create_tm_periods(src_df.index.size, the_periodicity, periods)
 
     src_chg_streams = {
         srs_type_topic: src_col_topic,
@@ -1206,308 +1299,354 @@ def change_analysis(src_df, src_col_topic='topic', src_col_rf=None,
     }
 
     # create change/return time period columns
+    # there is probably a better way to check if certain measures should be
+    # calc'ed v. using a bunch of if statements, but i'm lazy
     cols = []
     for key in src_chg_streams:
-        cols.append([key, level, tm_period_spot[0]])
-        cols.append([key, level_ln, tm_period_spot[0]])
-        cols.append([key, chg_rel, tm_period_spot[0]])
-        for key2 in tm_periods.keys():
-            cols.append([key, chg_ln, key2])
-            cols.append([key, chg_abs, key2])
-            cols.append([key, vol_lvl, key2])
-            cols.append([key, vol_lvl_ln, key2])
+        for measure in [m_lbls.level, m_lbls.level_ln, m_lbls.chg_rel]:
+            if measure in measures:
+                cols.append([key, measure, tm_periods[TP_SPOT].name])
+        
+        for key2 in tm_periods:
+            for measure in [m_lbls.chg_ln, m_lbls.chg_abs, m_lbls.vol_lvl, 
+                            m_lbls.vol_lvl_ln]:
+                if measure in measures:
+                    cols.append([key, measure, tm_periods[key2].name])
+    
     for key in [srs_type_excess, srs_type_active]:
-        cols.append([key, chg_rel, tm_period_spot[0]])
-        for key2 in tm_periods.keys():
-            cols.append([key, chg_ln, key2])
-
+        if m_lbls.chg_rel in measures:
+            cols.append([key, m_lbls.chg_rel, tm_periods[TP_SPOT].name])
+        for key2 in tm_periods:
+            if m_lbls.chg_ln in measures:
+                cols.append([key, m_lbls.chg_ln, tm_periods[key2].name])
+    
     # create vol time period columns
     for key in chg_srs:
-        for key2 in tm_periods.keys():
-            if tm_periods[key2][1] is True:
-                cols.append([key, vol_cmp, key2])
-                cols.append([key, vol_ln, key2])
-
+        for key2 in tm_periods:
+            if tm_periods[key2].stat_flag is True:
+                for measure in [m_lbls.vol_cmp, m_lbls.vol_ln]:
+                    if measure in measures:
+                        cols.append([key, measure, tm_periods[key2].name])
+    
     # create time period columns for other measures
-    for key in tm_periods.keys():
-        if tm_periods[key][1] is True:
-            cols.append([srs_type_topic, sharpe_ln, key])
-            cols.append([srs_type_active, info_ratio_ln, key])
-            cols.append([srs_type_excess, vol_downside_ln, key])
-            cols.append([srs_type_excess, vol_upside_ln, key])
-            cols.append([srs_type_active, vol_downside_ln, key])
-            cols.append([srs_type_active, vol_upside_ln, key])
-            cols.append([srs_type_excess, sortino_ln, key])
-            cols.append([srs_type_active, sortino_ln, key])
-            cols.append([srs_type_excess, vol_skew_ln, key])
-            cols.append([srs_type_active, vol_skew_ln, key])
-            cols.append([srs_type_excess, mod_treynor_ln, key])
-            cols.append([srs_type_active, corr_lvl, key])
-            cols.append([srs_type_active, corr_lvl_ln, key])
-            cols.append([srs_type_active, corr_ln, key])
-            cols.append([srs_type_active, r2_ln, key])
-            cols.append([srs_type_active, beta_ln, key])
-            cols.append([srs_type_active, beta_up_ln, key])
-            cols.append([srs_type_active, beta_down_ln, key])
-            cols.append([srs_type_active, jensens_alpha_ln, key])
-            cols.append([srs_type_active, m2_ln, key])
-            cols.append([srs_type_active, m2_excess_ln, key])
-            for key2 in dd_cmp:
-                cols.append([srs_type_topic, key2, key])
-
+    for key in tm_periods:
+        if tm_periods[key].stat_flag is True:
+            for measure in [[m_lbls.sharpe_ln, srs_type_excess], 
+                            [m_lbls.info_ratio_ln, srs_type_active], 
+                            [m_lbls.vol_downside_ln, srs_type_excess], 
+                            [m_lbls.vol_upside_ln, srs_type_excess], 
+                            [m_lbls.vol_downside_ln, srs_type_active], 
+                            [m_lbls.vol_upside_ln, srs_type_active], 
+                            [m_lbls.sortino_ln, srs_type_excess], 
+                            [m_lbls.sortino_ln, srs_type_active], 
+                            [m_lbls.vol_skew_ln, srs_type_excess], 
+                            [m_lbls.vol_skew_ln, srs_type_active], 
+                            [m_lbls.mod_treynor_ln, srs_type_active], 
+                            [m_lbls.corr_lvl, srs_type_active], 
+                            [m_lbls.corr_lvl_ln, srs_type_active], 
+                            [m_lbls.corr_ln, srs_type_active], 
+                            [m_lbls.r2_ln, srs_type_active], 
+                            [m_lbls.beta_ln, srs_type_active], 
+                            [m_lbls.beta_up_ln, srs_type_active], 
+                            [m_lbls.beta_down_ln, srs_type_active], 
+                            [m_lbls.jensens_alpha_ln, srs_type_active], 
+                            [m_lbls.m2_ln, srs_type_active], 
+                            [m_lbls.m2_excess_ln, srs_type_active]]:
+                if measure[0] in measures:
+                    cols.append([measure[1], measure[0], tm_periods[key].name])
+            for key2 in m_lbls.dd_cmp:
+                if (key2 in measures) or (Measures.DRAWDOWN in measures):
+                    cols.append([srs_type_topic, key2, tm_periods[key].name])
+    
     df = pd.DataFrame(index=src_df.index,
                       columns=pd.MultiIndex.from_tuples(
                         cols, names=['srs_type', 'measure', 'period']))
 
     # calc spot changes
     for key in src_chg_streams:
-        df.loc[:, (key, level, tm_period_spot[0])] = \
-            src_df[src_chg_streams[key]]
-        df.loc[:, (key, level_ln, tm_period_spot[0])] = \
-            np.log(df[key][level][tm_period_spot[0]])
-        df.loc[:, (key, chg_ln, tm_period_spot[0])] = np.log(
-                1 + df[key][level][tm_period_spot[0]].pct_change(1))
-        df.loc[:, (key, chg_rel, tm_period_spot[0])] = np.exp(
-                df[key][chg_ln][tm_period_spot[0]]) - 1
-        df.loc[:, (key, chg_abs, tm_period_spot[0])] = \
-            df[key][level][tm_period_spot[0]].diff(1)
+        if (key, m_lbls.level, tm_periods[TP_SPOT].name) in df.columns:
+            df.loc[:, (key, m_lbls.level, tm_periods[TP_SPOT].name)] = \
+                src_df[src_chg_streams[key]]
+        if (key, m_lbls.level_ln, tm_periods[TP_SPOT].name) in df.columns:
+            df.loc[:, (key, m_lbls.level_ln, tm_periods[TP_SPOT].name)] = \
+                np.log(df[key][m_lbls.level][tm_periods[TP_SPOT].name])
+        if (key, m_lbls.chg_ln, tm_periods[TP_SPOT].name) in df.columns:
+            df.loc[:, (key, m_lbls.chg_ln, tm_periods[TP_SPOT].name)] = np.log(
+                    1 + df[key][m_lbls.level][tm_periods[TP_SPOT].name].pct_change(1))
+        if (key, m_lbls.chg_rel, tm_periods[TP_SPOT].name) in df.columns:
+            df.loc[:, (key, m_lbls.chg_rel, tm_periods[TP_SPOT].name)] = np.exp(
+                    df[key][m_lbls.chg_ln][tm_periods[TP_SPOT].name]) - 1
+        if (key, m_lbls.chg_abs, tm_periods[TP_SPOT].name) in df.columns:
+            df.loc[:, (key, m_lbls.chg_abs, tm_periods[TP_SPOT].name)] = \
+                df[key][m_lbls.level][tm_periods[TP_SPOT].name].diff(1)
 
     # calc excess returns
-    df.loc[:, (srs_type_excess, chg_ln, tm_period_spot[0])] = excess(
-            df[srs_type_topic][chg_ln][tm_period_spot[0]],
-            df[srs_type_rf][chg_ln][tm_period_spot[0]])
-    df.loc[:, (srs_type_excess, chg_rel, tm_period_spot[0])] = np.exp(
-            df[srs_type_excess][chg_ln][tm_period_spot[0]]) - 1
+    if (srs_type_excess, m_lbls.chg_ln, tm_periods[TP_SPOT].name) in df.columns:
+        df.loc[:, (srs_type_excess, m_lbls.chg_ln, tm_periods[TP_SPOT].name)] = excess(
+                df[srs_type_topic][m_lbls.chg_ln][tm_periods[TP_SPOT].name],
+                df[srs_type_rf][m_lbls.chg_ln][tm_periods[TP_SPOT].name])
+    if (srs_type_excess, m_lbls.chg_rel, tm_periods[TP_SPOT].name) in df.columns:
+        df.loc[:, (srs_type_excess, m_lbls.chg_rel, tm_periods[TP_SPOT].name)] = \
+            np.exp(df[srs_type_excess][m_lbls.chg_ln][tm_periods[TP_SPOT].name]) - 1
 
     # calc active returns
-    df.loc[:, (srs_type_active, chg_ln, tm_period_spot[0])] = excess(
-            df[srs_type_topic][chg_ln][tm_period_spot[0]],
-            df[srs_type_bmk][chg_ln][tm_period_spot[0]])
-    df.loc[:, (srs_type_active, chg_rel, tm_period_spot[0])] = np.exp(
-            df[srs_type_active][chg_ln][tm_period_spot[0]]) - 1
+    if (srs_type_active, m_lbls.chg_ln, tm_periods[TP_SPOT].name) in df.columns:
+        df.loc[:, (srs_type_active, m_lbls.chg_ln, tm_periods[TP_SPOT].name)] = excess(
+                df[srs_type_topic][m_lbls.chg_ln][tm_periods[TP_SPOT].name],
+                df[srs_type_bmk][m_lbls.chg_ln][tm_periods[TP_SPOT].name])
+    if (srs_type_active, m_lbls.chg_rel, tm_periods[TP_SPOT].name) in df.columns:
+        df.loc[:, (srs_type_active, m_lbls.chg_rel, tm_periods[TP_SPOT].name)] = \
+            np.exp(df[srs_type_active][m_lbls.chg_ln][tm_periods[TP_SPOT].name]) - 1
 
     for ret in chg_srs:
-        for key in tm_periods.keys():
+        for key in tm_periods:
             # only calc periodic returns if it's not the spot return
-            if key != tm_period_spot[0]:
-                cum_sum = (key == tm_period_cum[0])
-
-                df.loc[:, (ret, chg_ln, key)] = rolling_chg(
-                    df[ret][chg_ln][tm_period_spot[0]],
-                    tm_periods[key][0] * periodicity,
-                    periodicity,
-                    annualize_flag,
-                    cum_sum)
+            if tm_periods[key] != tm_periods[TP_SPOT]:
+                cum_sum = (key == TP_CUM)
+                if (ret, m_lbls.chg_ln, tm_periods[key].name) in df.columns:
+                    df.loc[:, (ret, m_lbls.chg_ln, tm_periods[key].name)] = rolling_chg(
+                        df[ret][m_lbls.chg_ln][tm_periods[TP_SPOT].name],
+                        tm_periods[key].ann_factor * periodicity,
+                        periodicity,
+                        annualize_flag,
+                        cum_sum)
                 # only calc the abs chg & vols for topic, bmk, and rfr streams
                 if ret in src_chg_streams:
-                    df.loc[:, (ret, chg_abs, key)] = rolling_chg(
-                        df[ret][chg_abs][tm_period_spot[0]],
-                        tm_periods[key][0] * periodicity,
-                        periodicity,
-                        False,
-                        cum_sum)
-                    df.loc[:, (ret, vol_lvl, key)] = rolling_vol(
-                        df[ret][level][tm_period_spot[0]],
-                        tm_periods[key][0] * periodicity,
-                        periodicity,
-                        annualize_flag,
-                        cum_sum)
-                    df.loc[:, (ret, vol_lvl_ln, key)] = rolling_vol(
-                        df[ret][level_ln][tm_period_spot[0]],
-                        tm_periods[key][0] * periodicity,
-                        periodicity,
-                        annualize_flag,
-                        cum_sum)
+                    if (ret, m_lbls.chg_abs, tm_periods[key].name) in df.columns:
+                        df.loc[:, (ret, m_lbls.chg_abs, tm_periods[key].name)] = rolling_chg(
+                            df[ret][m_lbls.chg_abs][tm_periods[TP_SPOT].name],
+                            tm_periods[key].ann_factor * periodicity,
+                            periodicity,
+                            False,
+                            cum_sum)
+                    if (ret, m_lbls.vol_lvl, tm_periods[key].name) in df.columns:
+                        df.loc[:, (ret, m_lbls.vol_lvl, tm_periods[key].name)] = rolling_vol(
+                            df[ret][m_lbls.level][tm_periods[TP_SPOT].name],
+                            tm_periods[key].ann_factor * periodicity,
+                            periodicity,
+                            annualize_flag,
+                            cum_sum)
+                    if (ret, m_lbls.vol_lvl_ln, tm_periods[key].name) in df.columns:
+                        df.loc[:, (ret, m_lbls.vol_lvl_ln, tm_periods[key].name)] = rolling_vol(
+                            df[ret][m_lbls.level_ln][tm_periods[TP_SPOT].name],
+                            tm_periods[key].ann_factor * periodicity,
+                            periodicity,
+                            annualize_flag,
+                            cum_sum)
 
     # calc vols for compound + log returns
     for ret in chg_srs:
-        for key in tm_periods.keys():
-            if tm_periods[key][1] is True:
-                if key == tm_period_cum[0]:
+        for key in tm_periods:
+            if tm_periods[key].stat_flag is True:
+                if key == TP_CUM:
                     cum = True
                 else:
                     cum = False
-                df.loc[:, (ret, vol_ln, key)] = rolling_vol(
-                    df[ret][chg_ln][tm_period_spot[0]],
-                    tm_periods[key][0] * periodicity,
-                    periodicity,
-                    annualize_flag,
-                    cum)
-                df.loc[:, (ret, vol_cmp, key)] = rolling_vol(
-                    df[ret][chg_rel][tm_period_spot[0]],
-                    tm_periods[key][0] * periodicity,
-                    periodicity,
-                    annualize_flag,
-                    cum)
+                if (ret, m_lbls.vol_ln, tm_periods[key].name) in df.columns:
+                    df.loc[:, (ret, m_lbls.vol_ln, tm_periods[key].name)] = rolling_vol(
+                        df[ret][m_lbls.chg_ln][tm_periods[TP_SPOT].name],
+                        tm_periods[key].ann_factor * periodicity,
+                        periodicity,
+                        annualize_flag,
+                        cum)
+                if (ret, m_lbls.vol_cmp, tm_periods[key].name) in df.columns:
+                    df.loc[:, (ret, m_lbls.vol_cmp, tm_periods[key].name)] = rolling_vol(
+                        df[ret][m_lbls.chg_rel][tm_periods[TP_SPOT].name],
+                        tm_periods[key].ann_factor * periodicity,
+                        periodicity,
+                        annualize_flag,
+                        cum)
 
-    for key in tm_periods.keys():
-        if tm_periods[key][1] is True:
-            if key == tm_period_cum[0]:
+    for key in tm_periods:
+        if tm_periods[key].stat_flag is True:
+            if key == TP_CUM:
                 annual_factor = np.maximum(
-                    df[srs_type_topic][chg_ln][key].expanding().count(),
+                    df[srs_type_topic][m_lbls.chg_ln][tm_periods[key].name].expanding().count(),
                     periodicity) / periodicity
                 cum = True
             else:
                 if annualize_flag is True:
                     annual_factor = 1
                 else:
-                    annual_factor = tm_periods[key][0]
+                    annual_factor = key.ann_factor
                 cum = False
 
             # calc sharpe ratio
-            df.loc[:, (srs_type_topic, sharpe_ln, key)] = sharpe(
-                df[srs_type_topic][chg_ln][key] / annual_factor,
-                df[srs_type_rf][chg_ln][key] / annual_factor,
-                df[srs_type_topic][vol_ln][key])
+            if (srs_type_excess, m_lbls.sharpe_ln, tm_periods[key].name) in df.columns:
+                df.loc[:, (srs_type_excess, m_lbls.sharpe_ln, tm_periods[key].name)] = sharpe(
+                    df[srs_type_topic][m_lbls.chg_ln][tm_periods[key].name] / annual_factor,
+                    df[srs_type_rf][m_lbls.chg_ln][tm_periods[key].name] / annual_factor,
+                    df[srs_type_topic][m_lbls.vol_ln][tm_periods[key].name])
 
             # calc info ratio
-            df.loc[:, (srs_type_active, info_ratio_ln, key)] = info_ratio(
-                df[srs_type_topic][chg_ln][key] / annual_factor,
-                df[srs_type_bmk][chg_ln][key] / annual_factor,
-                df[srs_type_active][vol_ln][key])
+            if (srs_type_active, m_lbls.info_ratio_ln, tm_periods[key].name) in df.columns:
+                df.loc[:, (srs_type_active, m_lbls.info_ratio_ln, tm_periods[key].name)] = \
+                    info_ratio(df[srs_type_topic][m_lbls.chg_ln][tm_periods[key].name] / 
+                            annual_factor, 
+                            df[srs_type_bmk][m_lbls.chg_ln][tm_periods[key].name] / 
+                            annual_factor,
+                            df[srs_type_active][m_lbls.vol_ln][tm_periods[key].name])
 
             # calc excess up/down vols
-            df.loc[:, (srs_type_excess, vol_downside_ln, key)] = rolling_vol(
-                df[srs_type_excess][chg_ln][tm_period_spot[0]],
-                tm_periods[key][0] * periodicity,
-                periodicity, annualize_flag, cum, -1, 0)
-            df.loc[:, (srs_type_excess, vol_upside_ln, key)] = rolling_vol(
-                df[srs_type_excess][chg_ln][tm_period_spot[0]],
-                tm_periods[key][0] * periodicity,
-                periodicity, annualize_flag, cum, 1, 0)
+            if (srs_type_excess, m_lbls.vol_downside_ln, tm_periods[key].name) in df.columns:
+                df.loc[:, (srs_type_excess, m_lbls.vol_downside_ln, tm_periods[key].name)] = \
+                    rolling_vol(df[srs_type_excess][m_lbls.chg_ln][tm_periods[TP_SPOT].name],
+                                tm_periods[key].ann_factor * periodicity,
+                                periodicity, annualize_flag, cum, -1, 0)
+            if (srs_type_excess, m_lbls.vol_upside_ln, tm_periods[key].name) in df.columns:
+                df.loc[:, (srs_type_excess, m_lbls.vol_upside_ln, tm_periods[key].name)] = \
+                    rolling_vol(df[srs_type_excess][m_lbls.chg_ln][tm_periods[TP_SPOT].name],
+                                tm_periods[key].ann_factor * periodicity,
+                                periodicity, annualize_flag, cum, 1, 0)
 
-            # calc acive up/down vols
-            df.loc[:, (srs_type_active, vol_downside_ln, key)] = rolling_vol(
-                df[srs_type_active][chg_ln][tm_period_spot[0]],
-                tm_periods[key][0] * periodicity,
-                periodicity, annualize_flag, cum, -1, 0)
-            df.loc[:, (srs_type_active, vol_upside_ln, key)] = rolling_vol(
-                df[srs_type_active][chg_ln][tm_period_spot[0]],
-                tm_periods[key][0] * periodicity,
-                periodicity, annualize_flag, cum, 1, 0)
+            # calc active up/down vols
+            if (srs_type_active, m_lbls.vol_downside_ln, tm_periods[key].name) in df.columns:
+                df.loc[:, (srs_type_active, m_lbls.vol_downside_ln, tm_periods[key].name)] = \
+                    rolling_vol(df[srs_type_active][m_lbls.chg_ln][tm_periods[TP_SPOT].name],
+                                tm_periods[key].ann_factor * periodicity,
+                                periodicity, annualize_flag, cum, -1, 0)
+            if (srs_type_active, m_lbls.vol_upside_ln, tm_periods[key].name) in df.columns:          
+                df.loc[:, (srs_type_active, m_lbls.vol_upside_ln, tm_periods[key].name)] = \
+                    rolling_vol(df[srs_type_active][m_lbls.chg_ln][tm_periods[TP_SPOT].name],
+                                tm_periods[key].ann_factor * periodicity,
+                                periodicity, annualize_flag, cum, 1, 0)
 
             # calc sortino ratios
-            df.loc[:, (srs_type_excess, sortino_ln, key)] = sortino(
-                df[srs_type_topic][chg_ln][key] / annual_factor,
-                df[srs_type_rf][chg_ln][key] / annual_factor,
-                df[srs_type_excess][vol_downside_ln][key])
-            df.loc[:, (srs_type_active, sortino_ln, key)] = sortino(
-                df[srs_type_topic][chg_ln][key] / annual_factor,
-                df[srs_type_bmk][chg_ln][key] / annual_factor,
-                df[srs_type_active][vol_downside_ln][key])
+            if (srs_type_excess, m_lbls.sortino_ln, tm_periods[key].name) in df.columns:
+                df.loc[:, (srs_type_excess, m_lbls.sortino_ln, tm_periods[key].name)] = sortino(
+                    df[srs_type_topic][m_lbls.chg_ln][tm_periods[key].name] / annual_factor,
+                    df[srs_type_rf][m_lbls.chg_ln][tm_periods[key].name] / annual_factor,
+                    df[srs_type_excess][m_lbls.vol_downside_ln][tm_periods[key].name])
+            if (srs_type_active, m_lbls.sortino_ln, tm_periods[key].name) in df.columns:
+                df.loc[:, (srs_type_active, m_lbls.sortino_ln, tm_periods[key].name)] = sortino(
+                    df[srs_type_topic][m_lbls.chg_ln][tm_periods[key].name] / annual_factor,
+                    df[srs_type_bmk][m_lbls.chg_ln][tm_periods[key].name] / annual_factor,
+                    df[srs_type_active][m_lbls.vol_downside_ln][tm_periods[key].name])
 
             # calc vol skew ratios
-            df.loc[:, (srs_type_excess, vol_skew_ln, key)] = vol_skew(
-                df[srs_type_excess][vol_upside_ln][key],
-                df[srs_type_excess][vol_downside_ln][key])
-            df.loc[:, (srs_type_active, vol_skew_ln, key)] = vol_skew(
-                df[srs_type_active][vol_upside_ln][key],
-                df[srs_type_active][vol_downside_ln][key])
+            if (srs_type_excess, m_lbls.vol_skew_ln, tm_periods[key].name) in df.columns:
+                df.loc[:, (srs_type_excess, m_lbls.vol_skew_ln, tm_periods[key].name)] = \
+                    vol_skew(df[srs_type_excess][m_lbls.vol_upside_ln][tm_periods[key].name],
+                             df[srs_type_excess][m_lbls.vol_downside_ln][tm_periods[key].name])
+            if (srs_type_active, m_lbls.vol_skew_ln, tm_periods[key].name) in df.columns:       
+                df.loc[:, (srs_type_active, m_lbls.vol_skew_ln, tm_periods[key].name)] = \
+                    vol_skew(df[srs_type_active][m_lbls.vol_upside_ln][tm_periods[key].name],
+                             df[srs_type_active][m_lbls.vol_downside_ln][tm_periods[key].name])
 
             # calc modified treynor ratio
-            df.loc[:, (srs_type_excess, mod_treynor_ln, key)] = mod_treynor(
-                df[srs_type_topic][chg_ln][key] / annual_factor,
-                df[srs_type_rf][chg_ln][key] / annual_factor,
-                df[srs_type_bmk][vol_ln][key])
+            if (srs_type_active, m_lbls.mod_treynor_ln, tm_periods[key].name) in df.columns:
+                df.loc[:, (srs_type_active, m_lbls.mod_treynor_ln, tm_periods[key].name)] = \
+                    mod_treynor(df[srs_type_topic][m_lbls.chg_ln][tm_periods[key].name] / 
+                                annual_factor, 
+                                df[srs_type_rf][m_lbls.chg_ln][tm_periods[key].name] / 
+                                annual_factor,
+                                df[srs_type_bmk][m_lbls.vol_ln][tm_periods[key].name])
 
             # calc correlations & r2
-            df.loc[:, (srs_type_active, corr_lvl, key)] = rolling_corr(
-                df[srs_type_topic][level][tm_period_spot[0]],
-                df[srs_type_bmk][level][tm_period_spot[0]],
-                tm_periods[key][0] * periodicity,
-                cum)
-            df.loc[:, (srs_type_active, corr_lvl_ln, key)] = rolling_corr(
-                df[srs_type_topic][level_ln][tm_period_spot[0]],
-                df[srs_type_bmk][level_ln][tm_period_spot[0]],
-                tm_periods[key][0] * periodicity,
-                cum)
-            df.loc[:, (srs_type_active, corr_ln, key)] = rolling_corr(
-                df[srs_type_topic][chg_ln][tm_period_spot[0]],
-                df[srs_type_bmk][chg_ln][tm_period_spot[0]],
-                tm_periods[key][0] * periodicity,
-                cum)
-            df.loc[:, (srs_type_active, r2_ln, key)] = \
-                df[srs_type_active][corr_ln][key] ** 2  # don't bother using r2
+            if (srs_type_active, m_lbls.corr_lvl, tm_periods[key].name) in df.columns:
+                df.loc[:, (srs_type_active, m_lbls.corr_lvl, tm_periods[key].name)] = \
+                    rolling_corr(df[srs_type_topic][m_lbls.level][tm_periods[TP_SPOT].name],
+                                 df[srs_type_bmk][m_lbls.level][tm_periods[TP_SPOT].name],
+                                 tm_periods[key].ann_factor * periodicity,cum)
+            if (srs_type_active, m_lbls.corr_lvl_ln, tm_periods[key].name) in df.columns:
+                df.loc[:, (srs_type_active, m_lbls.corr_lvl_ln, tm_periods[key].name)] = \
+                    rolling_corr(df[srs_type_topic][m_lbls.level_ln][tm_periods[TP_SPOT].name],
+                                 df[srs_type_bmk][m_lbls.level_ln][tm_periods[TP_SPOT].name],
+                                 tm_periods[key].ann_factor * periodicity, cum)
+            if (srs_type_active, m_lbls.corr_ln, tm_periods[key].name) in df.columns:
+                df.loc[:, (srs_type_active, m_lbls.corr_ln, tm_periods[key].name)] = \
+                    rolling_corr(df[srs_type_topic][m_lbls.chg_ln][tm_periods[TP_SPOT].name],
+                                 df[srs_type_bmk][m_lbls.chg_ln][tm_periods[TP_SPOT].name],
+                                 tm_periods[key].ann_factor * periodicity, cum)
+            if (srs_type_active, m_lbls.r2_ln, tm_periods[key].name) in df.columns:
+                df.loc[:, (srs_type_active, m_lbls.r2_ln, tm_periods[key].name)] = \
+                    df[srs_type_active][m_lbls.corr_ln][tm_periods[key].name] ** 2
 
             # calc betas to benchmark
-            df.loc[:, (srs_type_active, beta_ln, key)] = rolling_beta(
-                df[srs_type_topic][chg_ln][tm_period_spot[0]],
-                df[srs_type_bmk][chg_ln][tm_period_spot[0]],
-                tm_periods[key][0] * periodicity,
-                cum)
-            df.loc[:, (srs_type_active, beta_up_ln, key)] = rolling_beta(
-                df[srs_type_topic][chg_ln][tm_period_spot[0]],
-                df[srs_type_bmk][chg_ln][tm_period_spot[0]],
-                tm_periods[key][0] * periodicity,
-                cum, 1, 0)
-            df.loc[:, (srs_type_active, beta_down_ln, key)] = rolling_beta(
-                df[srs_type_topic][chg_ln][tm_period_spot[0]],
-                df[srs_type_bmk][chg_ln][tm_period_spot[0]],
-                tm_periods[key][0] * periodicity,
-                cum, -1, 0)
+            if (srs_type_active, m_lbls.beta_ln, tm_periods[key].name) in df.columns:
+                df.loc[:, (srs_type_active, m_lbls.beta_ln, tm_periods[key].name)] = \
+                    rolling_beta(df[srs_type_topic][m_lbls.chg_ln][tm_periods[TP_SPOT].name],
+                                 df[srs_type_bmk][m_lbls.chg_ln][tm_periods[TP_SPOT].name],
+                                 tm_periods[key].ann_factor * periodicity, cum)
+            if (srs_type_active, m_lbls.beta_up_ln, tm_periods[key].name) in df.columns:
+                df.loc[:, (srs_type_active, m_lbls.beta_up_ln, tm_periods[key].name)] = \
+                    rolling_beta(df[srs_type_topic][m_lbls.chg_ln][tm_periods[TP_SPOT].name],
+                                 df[srs_type_bmk][m_lbls.chg_ln][tm_periods[TP_SPOT].name],
+                                 tm_periods[key].ann_factor * periodicity, cum, 1, 0)
+            if (srs_type_active, m_lbls.beta_down_ln, tm_periods[key].name) in df.columns:           
+                df.loc[:, (srs_type_active, m_lbls.beta_down_ln, tm_periods[key].name)] = \
+                    rolling_beta(df[srs_type_topic][m_lbls.chg_ln][tm_periods[TP_SPOT].name],
+                                 df[srs_type_bmk][m_lbls.chg_ln][tm_periods[TP_SPOT].name],
+                                 tm_periods[key].ann_factor * periodicity, cum, -1, 0)
 
             # calc jensen's alpha -- real alpha, not just active return b.s.
-            df.loc[:, (srs_type_active, jensens_alpha_ln, key)] = \
-                jensens_alpha(df[srs_type_topic][chg_ln][key] / annual_factor,
-                              df[srs_type_bmk][chg_ln][key] / annual_factor,
-                              df[srs_type_rf][chg_ln][key] / annual_factor,
-                              df[srs_type_active][beta_ln][key])
+            if (srs_type_active, m_lbls.jensens_alpha_ln, tm_periods[key].name) in df.columns:
+                df.loc[:, (srs_type_active, m_lbls.jensens_alpha_ln, tm_periods[key].name)] = \
+                    jensens_alpha(df[srs_type_topic][m_lbls.chg_ln][tm_periods[key].name] / 
+                                annual_factor,
+                                df[srs_type_bmk][m_lbls.chg_ln][tm_periods[key].name] / 
+                                annual_factor,
+                                df[srs_type_rf][m_lbls.chg_ln][tm_periods[key].name] / 
+                                annual_factor,
+                                df[srs_type_active][m_lbls.beta_ln][tm_periods[key].name])
 
             # calc m2 return and excess return
-            df.loc[:, (srs_type_active, m2_ln, key)] = m2(
-                df[srs_type_topic][chg_ln][key] / annual_factor,
-                df[srs_type_topic][vol_ln][key],
-                df[srs_type_topic][sharpe_ln][key],
-                df[srs_type_bmk][vol_ln][key], cum, annual_factor)
-            df.loc[:, (srs_type_active, m2_excess_ln, key)] = m2_excess(
-                df[srs_type_active][m2_ln][key], df[srs_type_bmk][chg_ln][key])
-
-            """
+            if (srs_type_active, m_lbls.m2_ln, tm_periods[key].name) in df.columns:
+                df.loc[:, (srs_type_active, m_lbls.m2_ln, tm_periods[key].name)] = m2(
+                    df[srs_type_topic][m_lbls.chg_ln][tm_periods[key].name] / annual_factor,
+                    df[srs_type_topic][m_lbls.vol_ln][tm_periods[key].name],
+                    df[srs_type_excess][m_lbls.sharpe_ln][tm_periods[key].name],
+                    df[srs_type_bmk][m_lbls.vol_ln][tm_periods[key].name], cum, annual_factor)
+            if (srs_type_active, m_lbls.m2_excess_ln, tm_periods[key].name) in df.columns:
+                df.loc[:, (srs_type_active, m_lbls.m2_excess_ln, tm_periods[key].name)] = \
+                    m2_excess(df[srs_type_active][m_lbls.m2_ln][tm_periods[key].name], 
+                              df[srs_type_bmk][m_lbls.chg_ln][tm_periods[key].name])
+                        
             # calculate rolling drawdowns. algo needs to be rewritten -- thing
             # is insanely slow
-            dd_df = rolling_dd_series(
-                df[srs_type_topic][chg_ln][tm_period_spot[0]],
-                tm_periods[key][0] * periodicity,
-                cum)
-            if not dd_df.empty:
-                df.loc[:, (srs_type_topic, dd_series_cmp, key)] = np.nan
-                df.loc[:, (srs_type_topic, dd_count_cmp, key)] = dd_df['count']
-                df.loc[:, (srs_type_topic, dd_avg_size_cmp, key)] = \
-                    dd_df['size_avg']
-                df.loc[:, (srs_type_topic, dd_avg_periods_cmp, key)] = \
-                    dd_df['length_avg']
-                df.loc[:, (srs_type_topic, dd_med_size_cmp, key)] = \
-                    dd_df['size_med']
-                df.loc[:, (srs_type_topic, dd_med_periods_cmp, key)] = \
-                    dd_df['length_med']
-                df.loc[:, (srs_type_topic, dd_max_size_cmp, key)] = \
-                    dd_df['max_size']
-                df.loc[:, (srs_type_topic, dd_max_size_periods_cmp, key)] = \
-                    dd_df['max_size_length']
-                df.loc[:, (srs_type_topic, dd_max_size_start_cmp, key)] = \
-                    dd_df['max_size_start']
-                df.loc[:, (srs_type_topic, dd_max_size_end_cmp, key)] = \
-                    dd_df['max_size_end']
-                df.loc[:, (srs_type_topic, dd_max_length_size_cmp, key)] = \
-                    dd_df['max_length_size']
-                df.loc[:, (srs_type_topic, dd_max_length_cmp, key)] = \
-                    dd_df['max_length']
-                df.loc[:, (srs_type_topic, dd_max_length_start_cmp, key)] = \
-                    dd_df['max_length_start']
-                df.loc[:, (srs_type_topic, dd_max_length_end_cmp, key)] = \
-                    dd_df['max_length_end']
-                df.loc[:, (srs_type_topic, dd_curr_series_cmp, key)] = np.nan
-                df.loc[:, (srs_type_topic, dd_curr_size_cmp, key)] = \
-                    dd_df['curr_size']
-                df.loc[:, (srs_type_topic, dd_curr_max_size_cmp, key)] = \
-                    dd_df['curr_max_size']
-                df.loc[:, (srs_type_topic, dd_curr_length_cmp, key)] = \
-                    dd_df['curr_length']
-                df.loc[:, (srs_type_topic, dd_curr_start_cmp, key)] = \
-                    dd_df['curr_start']
-            """
+            if (srs_type_topic, m_lbls.dd_series_cmp, tm_periods[key].name) in df.columns:
+                dd_df = rolling_dd_series(
+                    df[srs_type_topic][m_lbls.chg_ln][tm_periods[TP_SPOT].name],
+                    tm_periods[key].ann_factor * periodicity, cum)
+                if not dd_df.empty:
+                    df.loc[:, (srs_type_topic, m_lbls.dd_series_cmp, tm_periods[key].name)] = np.nan
+                    df.loc[:, (srs_type_topic, m_lbls.dd_count_cmp, tm_periods[key].name)] = dd_df['count']
+                    df.loc[:, (srs_type_topic, m_lbls.dd_avg_size_cmp, tm_periods[key].name)] = \
+                        dd_df['size_avg']
+                    df.loc[:, (srs_type_topic, m_lbls.dd_avg_periods_cmp, tm_periods[key].name)] = \
+                        dd_df['length_avg']
+                    df.loc[:, (srs_type_topic, m_lbls.dd_med_size_cmp, tm_periods[key].name)] = \
+                        dd_df['size_med']
+                    df.loc[:, (srs_type_topic, m_lbls.dd_med_periods_cmp, tm_periods[key].name)] = \
+                        dd_df['length_med']
+                    df.loc[:, (srs_type_topic, m_lbls.dd_max_size_cmp, tm_periods[key].name)] = \
+                        dd_df['max_size']
+                    df.loc[:, (srs_type_topic, m_lbls.dd_max_size_periods_cmp, tm_periods[key].name)] = \
+                        dd_df['max_size_length']
+                    df.loc[:, (srs_type_topic, m_lbls.dd_max_size_start_cmp, tm_periods[key].name)] = \
+                        dd_df['max_size_start']
+                    df.loc[:, (srs_type_topic, m_lbls.dd_max_size_end_cmp, tm_periods[key].name)] = \
+                        dd_df['max_size_end']
+                    df.loc[:, (srs_type_topic, m_lbls.dd_max_length_size_cmp, tm_periods[key].name)] = \
+                        dd_df['max_length_size']
+                    df.loc[:, (srs_type_topic, m_lbls.dd_max_length_cmp, tm_periods[key].name)] = \
+                        dd_df['max_length']
+                    df.loc[:, (srs_type_topic, m_lbls.dd_max_length_start_cmp, tm_periods[key].name)] = \
+                        dd_df['max_length_start']
+                    df.loc[:, (srs_type_topic, m_lbls.dd_max_length_end_cmp, tm_periods[key].name)] = \
+                        dd_df['max_length_end']
+                    df.loc[:, (srs_type_topic, m_lbls.dd_curr_series_cmp, tm_periods[key].name)] = np.nan
+                    df.loc[:, (srs_type_topic, m_lbls.dd_curr_size_cmp, tm_periods[key].name)] = \
+                        dd_df['curr_size']
+                    df.loc[:, (srs_type_topic, m_lbls.dd_curr_max_size_cmp, tm_periods[key].name)] = \
+                        dd_df['curr_max_size']
+                    df.loc[:, (srs_type_topic, m_lbls.dd_curr_length_cmp, tm_periods[key].name)] = \
+                        dd_df['curr_length']
+                    df.loc[:, (srs_type_topic, m_lbls.dd_curr_start_cmp, tm_periods[key].name)] = \
+                        dd_df['curr_start']
 
     return df
+
 
 def main(src_file='infile.xlsx', src_sheet='Sheet1', src_col_dt='date',
          src_col_topic='strategy', src_col_rfr='rfr', src_col_bmk='benchmark',
@@ -1545,4 +1684,5 @@ if __name__ == '__main__':
     #tgt_file = ('PATH\\returns\\msci_output.xlsx')
     #tgt_file = ('PATH\\returns\\spx_trd_out.xlsx')
     #tgt_sheet = 'Sheet1'
-    main()
+    #main()
+    pass
